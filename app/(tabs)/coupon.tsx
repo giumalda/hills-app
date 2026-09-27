@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
 
 export default function CouponScreen() {
   const url = 'https://app.couponoo.it/hills-burger/promozioni-pubbliche';
@@ -15,6 +14,9 @@ export default function CouponScreen() {
       </SafeAreaView>
     );
   }
+
+  // Importazione dinamica: si attiva solo su app iOS e Android
+  const { WebView } = require('react-native-webview');
 
   return (
     <SafeAreaView style={styles.container}>
