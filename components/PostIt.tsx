@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { BlurView } from 'expo-blur';
 
 export default function PostIt({ titolo, testo, onClose }) {
   return (
