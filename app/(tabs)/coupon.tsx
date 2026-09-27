@@ -4,13 +4,14 @@ import { StyleSheet, SafeAreaView, Platform, Text, View, Pressable } from 'react
 export default function CouponScreen() {
   const url = 'https://app.couponoo.it/hills-burger/promozioni-pubbliche';
 
+  // Se siamo sul web, mostriamo il box pulito con il link diretto
   if (Platform.OS === 'web') {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.webWrapper}>
-          <Text style={styles.webTitle}>Coupon e Offerte</Text>
+          <Text style={styles.webTitle}>Coupon Hills' Burger</Text>
           <Text style={styles.webText}>
-            Accedi alla pagina ufficiale di Couponoo per scoprire tutte le promozioni attive e salvarle sul tuo smartphone.
+            Clicca sul pulsante qui sotto per aprire la pagina ufficiale dei coupon e riscattare le offerte.
           </Text>
           <Pressable 
             style={styles.webButton}
@@ -23,15 +24,14 @@ export default function CouponScreen() {
     );
   }
 
+  // Sull'app mobile carica la WebView nativa
   const { WebView } = require('react-native-webview');
 
   return (
     <SafeAreaView style={styles.container}>
       <WebView 
         source={{ uri: url }} 
-        style={styles.webview}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
+        style={styles.webview} 
       />
     </SafeAreaView>
   );
