@@ -29,6 +29,25 @@ export default function Home() {
   const [mostraPromo, setMostraPromo] = useState(true);
     
   return (
+    <View style={{ flex: 1 }}>
+      {/* Se mostraPromo è true, il Post-it compare sopra a tutto */}
+      {mostraPromo && (
+        <PostItSemplice
+          titolo="Avviso"
+          testo="Prova i nostri nuovi panini fuori menù!"
+          onClose={() => setMostraPromo(false)}
+        />
+      )}
+
+      {/* La tua ScrollView originale rimane identica, scivolerà sotto al Post-it */}
+      <ScrollView
+        style={{ backgroundColor: COLORS.sky }}
+        contentContainerStyle={{ paddingBottom: 48, alignItems: "center" }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 12 }}>
+          {/* ... il resto del tuo codice originale ... */}
+          
     <ScrollView
       style={{ backgroundColor: COLORS.sky }}
       contentContainerStyle={{ paddingBottom: 48, alignItems: "center" }}
