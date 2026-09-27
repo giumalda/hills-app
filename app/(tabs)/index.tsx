@@ -18,6 +18,16 @@ export default function Home() {
   const isWide = width > 640
   const featureW = isWide ? (Math.min(width, 900) - 40 - 16) / 2 : (width - 40 - 12) / 2
 
+  export default function Home() {
+  const insets = useSafeAreaInsets()
+  const router = useRouter()
+  const { width } = useWindowDimensions()
+  const isWide = width > 640
+  const featureW = isWide ? (Math.min(width, 900) - 40 - 16) / 2 : (width - 40 - 12) / 2
+
+  // Aggiungi questa riga per controllare il Post-it
+  const [mostraPromo, setMostraPromo] = useState(true);
+    
   return (
     <ScrollView
       style={{ backgroundColor: COLORS.sky }}
