@@ -4,14 +4,13 @@ import { StyleSheet, SafeAreaView, Platform, Text, View, Pressable } from 'react
 export default function CouponScreen() {
   const url = 'https://app.couponoo.it/hills-burger/promozioni-pubbliche';
 
-  // Se siamo sul browser web del pc, evitiamo il blocco di sicurezza di Vercel/Couponoo
   if (Platform.OS === 'web') {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.webWrapper}>
-          <Text style={styles.webTitle}>Offerte e Coupon Hills' Burger</Text>
+          <Text style={styles.webTitle}>Coupon e Offerte</Text>
           <Text style={styles.webText}>
-            Accedi alla piattaforma ufficiale per riscattare le promozioni e salvarle nel tuo Wallet.
+            Accedi alla pagina ufficiale di Couponoo per scoprire tutte le promozioni attive e salvarle sul tuo smartphone.
           </Text>
           <Pressable 
             style={styles.webButton}
@@ -24,7 +23,6 @@ export default function CouponScreen() {
     );
   }
 
-  // Sull'app per smartphone carica direttamente la pagina interattiva dei coupon
   const { WebView } = require('react-native-webview');
 
   return (
