@@ -7,6 +7,9 @@ import { PopButton } from "@/components/PopButton"
 import { SectionTitle } from "@/components/SectionTitle"
 import { COLORS } from "@/constants/theme"
 import { VENUE, FEATURES, REVIEWS } from "@/data/info"
+import { useState } from 'react';
+// Assicurati che il percorso coincida con la cartella dove hai salvato il file
+import PostItSemplice from '@/components/PostItSemplice';
 
 export default function Home() {
   const insets = useSafeAreaInsets()
