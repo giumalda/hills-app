@@ -1,26 +1,37 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { BlurView } from 'expo-blur';
-import { BlurView } from 'expo-blur';
 
-export default function PostIt({ titolo, testo, onClose }) {
+export default function PostItSemplice({ titolo, testo, onClose }) {
   return (
-    <View className="absolute top-12 left-5 right-5 z-50">
-      <BlurView
-        intensity={60}
-        tint="light"
-        className="p-5 rounded-2xl border border-white/40 overflow-hidden shadow-lg"
-      >
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="font-bold text-lg text-gray-900">{titolo}</Text>
-          <Pressable onPress={onClose} className="p-1">
-            <Text className="text-gray-500 font-bold text-lg">X</Text>
+    <View style={{
+      position: 'absolute',
+      top: 60,
+      left: 20,
+      right: 20,
+      zIndex: 999, // Fondamentale per scavalcare la ScrollView
+      elevation: 10,
+    }}>
+      <View style={{
+        padding: 20,
+        borderRadius: 16,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', // Effetto vetro leggero
+        borderWidth: 3,
+        borderColor: '#111111',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={{ fontWeight: '900', fontSize: 18, color: '#111' }}>{titolo}</Text>
+          <Pressable onPress={onClose} style={{ padding: 4 }}>
+            <Text style={{ color: '#666', fontWeight: '900', fontSize: 18 }}>X</Text>
           </Pressable>
         </View>
-        <Text className="text-gray-800 text-base leading-relaxed">
+        <Text style={{ color: '#333', fontSize: 15, lineHeight: 22, fontWeight: '600' }}>
           {testo}
         </Text>
-      </BlurView>
+      </View>
     </View>
   );
 }
