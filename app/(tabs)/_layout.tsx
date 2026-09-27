@@ -44,12 +44,12 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-  name="coupon"
-  options={{
-    title: 'Coupon',
-    tabBarIcon: ({ color }) => <TabBarIcon name="ticket" color={color} />,
-  }}
-/>
+        name="coupon"
+        options={{
+          title: "Coupon",
+          tabBarIcon: ({ color, size }) => <Ionicons name="ticket" size={size} color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="contatti"
         options={{
