@@ -1,0 +1,29 @@
+name: Expo Cloud Build
+on:
+  push:
+    branches:
+      - main # Si attiva quando modifichi il codice su GitHub nel ramo main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      - name: Configura Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Installa EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Installa le dipendenze dell'app
+        run: npm install
+
+      - name: Avvia la build su Expo Cloud
+        run: eas build --platform ios --profile preview --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }} # Chiave segreta per fare l'accesso a tuo nome
+          EAS_NO_VCS: 1
