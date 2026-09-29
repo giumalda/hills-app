@@ -23,9 +23,7 @@ jobs:
 
       - name: Compila il codice rilevando lo schema esatto
         run: |
-          # Trova il nome del file .xcworkspace dentro la cartella ios
           WORKSPACE=$(ls ios | grep .xcworkspace)
-          # Estrae automaticamente il nome dello schema corretto generato da Expo
           SCHEME=$(xcodebuild -workspace ios/$WORKSPACE -list | grep "Schemes:" -A 1 | tail -n 1 | xargs)
           
           echo "Workspace trovato: $WORKSPACE"
@@ -37,12 +35,13 @@ jobs:
                      -sdk iphoneos \
                      CODE_SIGNING_ALLOWED=NO \
                      CODE_SIGNING_REQUIRED=NO \
-                     CONFIGURATION_BUILD_DIR=../build
+                     -derivedDataPath build_output
 
-      - name: Pacchettizza l'app nel file .ipa reale
+      - name: Pacchettizza l'app nel file .ipa reale (Trucco del Payload)
         run: |
           mkdir Payload
-          cp -r ios/build/hillsburger.app Payload/ || cp -r ios/build/*.app Payload/
+          # Trova ricorsivamente il file .app generato dentro i dati di build e lo copia nel Payload
+          find build_output -name "*.app" -exec cp -r {} Payload/ \;
           zip -r hillsburger.ipa Payload
 
       - name: Rendi l'IPA scaricabile su GitHub
