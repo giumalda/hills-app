@@ -1,11 +1,11 @@
 name: Compila Vero IPA Senza Apple ID
 on:
   push:
-    branches: [ main ] # Si attiva quando carichi i file su GitHub nel ramo main
+    branches: [ main ]
 
 jobs:
   build-ios:
-    runs-on: macos-latest # GitHub accende un Mac virtuale aggiornato
+    runs-on: macos-latest
     steps:
       - name: Recupera il codice
         uses: actions/checkout@v4
@@ -21,19 +21,28 @@ jobs:
       - name: Genera la cartella iOS nativa
         run: npx expo prebuild --platform ios
 
-      - name: Compila il codice in un'app Nativa (.app)
+      - name: Compila il codice rilevando lo schema esatto
         run: |
-          xcodebuild -workspace ios/hillsburger.xcworkspace \
-                     -scheme hillsburger \
+          # Trova il nome del file .xcworkspace dentro la cartella ios
+          WORKSPACE=$(ls ios | grep .xcworkspace)
+          # Estrae automaticamente il nome dello schema corretto generato da Expo
+          SCHEME=$(xcodebuild -workspace ios/$WORKSPACE -list | grep "Schemes:" -A 1 | tail -n 1 | xargs)
+          
+          echo "Workspace trovato: $WORKSPACE"
+          echo "Scheme rilevato: $SCHEME"
+          
+          xcodebuild -workspace ios/$WORKSPACE \
+                     -scheme "$SCHEME" \
                      -configuration Release \
                      -sdk iphoneos \
                      CODE_SIGNING_ALLOWED=NO \
-                     CODE_SIGNING_REQUIRED=NO
+                     CODE_SIGNING_REQUIRED=NO \
+                     CONFIGURATION_BUILD_DIR=../build
 
-      - name: Pacchettizza l'app nel file .ipa reale (Trucco del Payload)
+      - name: Pacchettizza l'app nel file .ipa reale
         run: |
           mkdir Payload
-          cp -r ios/build/Build/Products/Release-iphoneos/hillsburger.app Payload/
+          cp -r ios/build/hillsburger.app Payload/ || cp -r ios/build/*.app Payload/
           zip -r hillsburger.ipa Payload
 
       - name: Rendi l'IPA scaricabile su GitHub
