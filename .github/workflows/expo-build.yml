@@ -1,4 +1,4 @@
-name: Compila Vero IPA Senza Apple ID
+name: Compila iOS e Android
 on:
   push:
     branches: [ main ]
@@ -40,7 +40,6 @@ jobs:
       - name: Pacchettizza l'app nel file .ipa reale (Trucco del Payload)
         run: |
           mkdir Payload
-          # Trova ricorsivamente il file .app generato dentro i dati di build e lo copia nel Payload
           find build_output -name "*.app" -exec cp -r {} Payload/ \;
           zip -r hillsburger.ipa Payload
 
@@ -49,3 +48,38 @@ jobs:
         with:
           name: HillsBurger-Vero-IPA
           path: hillsburger.ipa
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recupera il codice
+        uses: actions/checkout@v4
+
+      - name: Configura Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installa Java per Android
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Installa le dipendenze
+        run: npm install
+
+      - name: Genera la cartella Android nativa
+        run: npx expo prebuild --platform android
+
+      - name: Compila l'APK di Android
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Rendi l'APK scaricabile su GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: HillsBurger-Android-APK
+          path: android/app/build
