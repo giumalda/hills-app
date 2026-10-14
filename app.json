@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "backgroundColor": "#4CC9F0",
+      "backgroundColor": "#FFD90F",
       "resizeMode": "contain"
     },
     "assetBundlePatterns": ["**/*"],
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#4CC9F0"
+        "backgroundColor": "#FFD90F"
       }
     },
     "web": {

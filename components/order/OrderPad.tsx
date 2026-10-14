@@ -57,24 +57,34 @@ export function OrderPad() {
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
-            backgroundColor: COLORS.sun,
-            borderWidth: 2,
-            borderColor: COLORS.ink,
-            borderRadius: 16,
+            backgroundColor: "rgba(255,255,255,0.82)",
+            borderWidth: 1,
+            borderColor: "rgba(255,255,255,0.95)",
+            borderRadius: 999,
             paddingHorizontal: 14,
-            paddingVertical: 12,
+            paddingVertical: 10,
             shadowColor: "#000",
-            shadowOpacity: 0.25,
-            shadowRadius: 12,
-            shadowOffset: { width: 0, height: 6 },
-            elevation: 8,
+            shadowOpacity: 0.14,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            elevation: 5,
+            ...(Platform.OS === "web"
+              ? {
+                  backdropFilter: "blur(12px) saturate(140%)",
+                  WebkitBackdropFilter: "blur(12px) saturate(140%)",
+                }
+              : {}),
           }}
         >
-          <Text style={{ fontFamily: FONTS.display, fontSize: 15, color: COLORS.ink, textTransform: "uppercase" }}>
-            Ordine
+          <Ionicons name="bag-handle-outline" size={18} color={COLORS.ink} />
+          <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.ink, textTransform: "uppercase" }}>
+            Carrello
           </Text>
-          <View style={{ backgroundColor: COLORS.primary, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 2 }}>
-            <Text style={{ fontFamily: FONTS.display, color: COLORS.white, fontSize: 13 }}>{count}</Text>
+          <Text style={{ fontFamily: FONTS.sansBold, color: COLORS.ink, fontSize: 12 }}>
+            € {total.toFixed(2).replace(".", ",")}
+          </Text>
+          <View style={{ backgroundColor: COLORS.primary, borderRadius: 999, minWidth: 22, alignItems: "center", paddingHorizontal: 6, paddingVertical: 2 }}>
+            <Text style={{ fontFamily: FONTS.display, color: COLORS.white, fontSize: 12 }}>{count}</Text>
           </View>
         </Pressable>
       ) : null}

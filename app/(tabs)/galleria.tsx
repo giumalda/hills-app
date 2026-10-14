@@ -1,6 +1,7 @@
 import { ScrollView, View, Text, Image, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { PopCard } from "@/components/PopCard"
+import { DotBackground } from "@/components/DotBackground"
 import { COLORS } from "@/constants/theme"
 
 const IMAGES = [
@@ -25,8 +26,10 @@ export default function Galleria() {
   const cardW = isWide ? (maxW - 40 - 16) / 2 : maxW - 40
 
   return (
-    <ScrollView style={{ backgroundColor: COLORS.pink }} contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-      <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 16, paddingHorizontal: 20 }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.sun }}>
+      <DotBackground />
+      <ScrollView style={{ backgroundColor: "transparent" }} contentContainerStyle={{ alignItems: "center", paddingBottom: 160 }} showsVerticalScrollIndicator={false}>
+        <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 16, paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 34, fontWeight: "900", color: COLORS.ink, letterSpacing: -1 }}>GALLERIA</Text>
         <Text style={{ fontSize: 15, fontWeight: "700", color: COLORS.ink, marginBottom: 20, opacity: 0.8 }}>
           Uno sguardo a quello che ti aspetta 🍔
@@ -45,7 +48,8 @@ export default function Galleria() {
             </PopCard>
           ))}
         </View>
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   )
 }

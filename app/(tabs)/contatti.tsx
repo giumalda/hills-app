@@ -2,6 +2,7 @@ import { ScrollView, View, Text, Pressable, Linking, useWindowDimensions } from 
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { PopCard } from "@/components/PopCard"
+import { DotBackground } from "@/components/DotBackground"
 import { SectionTitle } from "@/components/SectionTitle"
 import { COLORS } from "@/constants/theme"
 import { VENUE, HOURS, SERVICES } from "@/data/info"
@@ -17,7 +18,9 @@ export default function Contatti() {
   const serviceW = maxW > 640 ? (maxW - 40 - 24) / 3 : (maxW - 40 - 12) / 2
 
   return (
-    <ScrollView style={{ backgroundColor: COLORS.sky }} contentContainerStyle={{ alignItems: "center", paddingBottom: 44 }} showsVerticalScrollIndicator={false}>
+    <View style={{ flex: 1, backgroundColor: COLORS.sun }}>
+      <DotBackground />
+      <ScrollView style={{ backgroundColor: "transparent" }} contentContainerStyle={{ alignItems: "center", paddingBottom: 160 }} showsVerticalScrollIndicator={false}>
       <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 16, paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 34, fontWeight: "900", color: COLORS.ink, letterSpacing: -1, marginBottom: 4 }}>CONTATTI</Text>
         <Text style={{ fontSize: 15, fontWeight: "700", color: COLORS.ink, opacity: 0.8, marginBottom: 20 }}>{VENUE.fullName}</Text>
@@ -105,6 +108,7 @@ export default function Contatti() {
           ))}
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }
