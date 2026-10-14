@@ -1,6 +1,7 @@
-import { Pressable, Text, View, type PressableProps } from "react-native"
+import { Text, View, type PressableProps } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { hardShadow, COLORS } from "@/constants/theme"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
 
 type Props = PressableProps & {
   label: string
@@ -11,7 +12,7 @@ type Props = PressableProps & {
 
 export function PopButton({ label, bg = COLORS.red, color = "#FFFFFF", icon, style, ...rest }: Props) {
   return (
-    <Pressable
+    <AnimatedPressable
       {...rest}
       style={({ pressed }) => [
         {
@@ -31,6 +32,6 @@ export function PopButton({ label, bg = COLORS.red, color = "#FFFFFF", icon, sty
         {icon ? <Ionicons name={icon} size={20} color={color} /> : null}
         <Text style={{ color, fontSize: 16, fontWeight: "900", letterSpacing: 0.5 }}>{label}</Text>
       </View>
-    </Pressable>
+    </AnimatedPressable>
   )
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
+import { AnimatedPressable as Pressable } from "@/components/AnimatedPressable"
 
 export default function PostItSemplice({ titolo, testo, onClose }) {
   return (

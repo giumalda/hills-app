@@ -1,152 +1,151 @@
-import { ScrollView, View, Text, Image, Linking, useWindowDimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { PopButton } from "@/components/PopButton";
-import { SectionTitle } from "@/components/SectionTitle";
-import { DotBackground } from "@/components/DotBackground";
-import { SurfaceCard } from "@/components/SurfaceCard";
-import { COLORS, FONTS } from "@/constants/theme";
-import { VENUE, FEATURES, REVIEWS } from "@/data/info";
+import { useEffect } from "react"
+import { ScrollView, View, Text, Image, useWindowDimensions } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useRouter } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import Animated, {
+  cancelAnimation,
+  FadeInDown,
+  ReduceMotion,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated"
+import { PopButton } from "@/components/PopButton"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
+import { DotBackground } from "@/components/DotBackground"
+import { SurfaceCard } from "@/components/SurfaceCard"
+import { COLORS, FONTS } from "@/constants/theme"
+import { HOURS } from "@/data/info"
+
+const todayIndex = new Date().getDay()
+const today = HOURS[todayIndex === 0 ? 6 : todayIndex - 1]
+
+const QUICK_LINKS = [
+  { title: "Galleria", subtitle: "Guarda i nostri panini", icon: "images-outline" as const, route: "/galleria" },
+  { title: "Contatti", subtitle: `${today.day}: ${today.time}`, icon: "location-outline" as const, route: "/contatti" },
+]
 
 export default function Home() {
-  const insets = useSafeAreaInsets();
-  const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isWide = width > 640;
-  const featureW = isWide ? (Math.min(width, 900) - 40 - 16) / 2 : (width - 40 - 12) / 2;
+  const insets = useSafeAreaInsets()
+  const router = useRouter()
+  const { width } = useWindowDimensions()
+  const isWide = width > 640
+  const float = useSharedValue(0)
+  const reduceMotion = useReducedMotion()
+  const burgerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: reduceMotion ? 0 : float.value }],
+  }), [reduceMotion])
+
+  useEffect(() => {
+    if (reduceMotion) {
+      float.value = 0
+      return
+    }
+    float.value = withRepeat(
+      withSequence(
+        withTiming(-4, { duration: 1600 }),
+        withTiming(0, { duration: 1600 }),
+      ),
+      -1,
+    )
+    return () => cancelAnimation(float)
+  }, [float, reduceMotion])
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.sun }}>
       <DotBackground />
-
       <ScrollView
-        style={{ backgroundColor: "transparent" }}
         contentContainerStyle={{ paddingBottom: 150, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 12 }}>
-          
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 20, marginBottom: 16 }}>
-            <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.ink, letterSpacing: -0.5 }}>HILL&apos;S</Text>
-            <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.red, letterSpacing: -0.5 }}>BURGER</Text>
-            <View style={{ backgroundColor: COLORS.ink, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-              <Text style={{ color: COLORS.yellow, fontFamily: FONTS.display, fontSize: 10, letterSpacing: 1 }}>{VENUE.by}</Text>
+        <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 16, paddingHorizontal: 20 }}>
+          <Animated.View
+            entering={FadeInDown.duration(380).reduceMotion(ReduceMotion.System)}
+            style={{
+              alignItems: "center",
+              backgroundColor: "#FFF8D8",
+              borderRadius: 28,
+              borderWidth: 1,
+              borderColor: "rgba(26,20,15,0.08)",
+              paddingHorizontal: 20,
+              paddingTop: 12,
+              paddingBottom: 10,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 7 }}>
+              <Text style={{ fontFamily: FONTS.display, fontSize: 17, color: COLORS.ink }}>HILL&apos;S</Text>
+              <Text style={{ fontFamily: FONTS.display, fontSize: 17, color: COLORS.red }}>BURGER</Text>
+              <Text style={{ fontFamily: FONTS.sansBold, fontSize: 10, color: "rgba(26,20,15,0.58)" }}>
+                · MOTTOLA
+              </Text>
             </View>
-          </View>
-
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, paddingHorizontal: 20, marginBottom: 12 }}>
-            {VENUE.tags.map((t) => (
-              <View key={t} style={{ backgroundColor: COLORS.ink, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5 }}>
-                <Text style={{ color: COLORS.white, fontFamily: FONTS.sansBold, fontSize: 10, letterSpacing: 0.5 }}>{t}</Text>
-              </View>
-            ))}
-          </View>
-
-          <View style={{ paddingHorizontal: 20 }}>
-            <Text style={{ fontFamily: FONTS.display, fontSize: 52, lineHeight: 52, color: COLORS.ink, letterSpacing: -2 }}>
-              {VENUE.heroTop}
+            <Text style={{ fontFamily: FONTS.display, fontSize: 28, lineHeight: 33, color: COLORS.ink, textAlign: "center", marginTop: 10 }}>
+              COSA TI VA OGGI?
             </Text>
-            <Text style={{ fontFamily: FONTS.display, fontSize: 52, lineHeight: 54, color: COLORS.red, letterSpacing: -2 }}>
-              {VENUE.heroBottom}
+            <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 13, color: "rgba(26,20,15,0.68)", textAlign: "center", marginTop: 3 }}>
+              Scegli dal menu o crea il tuo panino
             </Text>
-          </View>
-
-          <View style={{ alignItems: "center", marginTop: 8, marginBottom: 4 }}>
-            <View style={{ position: "relative" }}>
+            <Animated.View style={[{ marginTop: 2 }, burgerStyle]}>
               <Image
                 source={require("@/assets/images/hero-burger.png")}
-                style={{ width: Math.min(width - 40, 420), height: Math.min(width - 40, 420) }}
+                accessibilityLabel="Illustrazione di hamburger Hill's"
+                style={{ width: Math.min(width - 100, 220), height: Math.min(width - 100, 120) }}
                 resizeMode="contain"
               />
-              <View
-                style={{
-                  position: "absolute",
-                  top: 6,
-                  right: 10,
-                  backgroundColor: COLORS.red,
-                  borderWidth: 3,
-                  borderColor: COLORS.ink,
-                  borderRadius: 999,
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  transform: [{ rotate: "12deg" }],
-                }}
-              >
-                <Text style={{ color: COLORS.white, fontFamily: FONTS.display, fontSize: 14 }}>40+ PANINI!</Text>
-              </View>
+            </Animated.View>
+            <View style={{ width: "100%", gap: 10, marginTop: 8, maxWidth: 420 }}>
+              <PopButton
+                label="VAI AL MENU"
+                icon="fast-food"
+                bg={COLORS.yellow}
+                color={COLORS.ink}
+                onPress={() => router.push("/menu")}
+              />
+              <PopButton
+                label="CREA IL TUO OMERO"
+                icon="construct"
+                bg={COLORS.ink}
+                color={COLORS.sun}
+                onPress={() => router.push("/crea-omero")}
+              />
             </View>
-          </View>
+          </Animated.View>
 
-          <View style={{ paddingHorizontal: 20 }}>
-            <SurfaceCard padding={18}>
-              <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 16, lineHeight: 24, color: COLORS.ink }}>{VENUE.intro}</Text>
-            </SurfaceCard>
-
-            <View style={{ flexDirection: "row", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
-              <View style={{ flex: 1, minWidth: 150 }}>
-                <PopButton label="GUARDA IL MENÙ" icon="fast-food" bg={COLORS.yellow} color={COLORS.ink} onPress={() => router.push("/menu")} />
-              </View>
-              <View style={{ flex: 1, minWidth: 150 }}>
-                <PopButton label="PRENOTA" icon="calendar" bg={COLORS.red} onPress={() => router.push("/prenota")} />
-              </View>
-              <View style={{ flex: 1, minWidth: 150 }}>
-                <PopButton label="CREA OMERO" icon="construct" bg={COLORS.ink} color={COLORS.sun} onPress={() => router.push("/crea-omero")} />
-              </View>
-            </View>
-          </View>
-
-          <View style={{ paddingHorizontal: 20, marginTop: 34 }}>
-            <SectionTitle accent={COLORS.pink}>IL LOCALE</SectionTitle>
+          <View style={{ marginTop: 14 }}>
+            <Text style={{ fontFamily: FONTS.display, fontSize: 18, color: COLORS.ink, marginBottom: 10 }}>
+              INIZIA DA QUI
+            </Text>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-              {FEATURES.map((f) => (
-                <SurfaceCard key={f.title} style={{ width: featureW }} padding={14}>
-                  <Text style={{ fontSize: 30 }}>{f.emoji}</Text>
-                  <Text style={{ fontFamily: FONTS.display, fontSize: 15, color: COLORS.ink, marginTop: 6 }}>{f.title}</Text>
-                  <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, color: "rgba(17,17,17,0.7)", marginTop: 4, lineHeight: 17 }}>{f.desc}</Text>
-                </SurfaceCard>
+              {QUICK_LINKS.map((link) => (
+                <AnimatedPressable
+                  key={link.title}
+                  accessibilityRole="button"
+                  onPress={() => router.push(link.route)}
+                  style={{ width: isWide ? (Math.min(width, 900) - 52) / 2 : (width - 52) / 2 }}
+                >
+                  <SurfaceCard padding={10} style={{ minHeight: 80, justifyContent: "center" }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                      <Ionicons name={link.icon} size={24} color={COLORS.red} />
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontFamily: FONTS.display, fontSize: 15, color: COLORS.ink }}>{link.title}</Text>
+                        <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, color: "rgba(26,20,15,0.62)", marginTop: 2 }}>
+                          {link.subtitle}
+                        </Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={16} color="rgba(26,20,15,0.45)" />
+                    </View>
+                  </SurfaceCard>
+                </AnimatedPressable>
               ))}
             </View>
-          </View>
-
-          <View style={{ marginTop: 34 }}>
-            <View style={{ paddingHorizontal: 20 }}>
-              <SectionTitle accent={COLORS.orange}>RECENSIONI</SectionTitle>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
-            >
-              {REVIEWS.map((r) => (
-                <SurfaceCard key={r.name} style={{ width: 260 }} padding={16}>
-                  <View style={{ flexDirection: "row", gap: 2, marginBottom: 8 }}>
-                    {Array.from({ length: r.stars }).map((_, i) => (
-                      <Ionicons key={i} name="star" size={16} color={COLORS.orange} />
-                    ))}
-                  </View>
-                  <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 14, lineHeight: 20, color: COLORS.ink }}>{r.text}</Text>
-                  <Text style={{ fontFamily: FONTS.display, fontSize: 13, color: COLORS.red, marginTop: 10 }}>{r.name}</Text>
-                </SurfaceCard>
-              ))}
-            </ScrollView>
-          </View>
-
-          <View style={{ paddingHorizontal: 20, marginTop: 34 }}>
-            <SurfaceCard padding={18}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                <Ionicons name="logo-whatsapp" size={38} color={COLORS.green} />
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: FONTS.display, fontSize: 17, color: COLORS.ink }}>Prenota su WhatsApp!</Text>
-                  <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 13, color: "rgba(26,20,15,0.7)" }}>Rispondiamo in pochi minuti</Text>
-                </View>
-                <PopButton label="APRI" bg={COLORS.green} color={COLORS.white} onPress={() => Linking.openURL(VENUE.whatsapp)} />
-              </View>
-            </SurfaceCard>
           </View>
 
         </View>
       </ScrollView>
     </View>
-  );
+  )
 }

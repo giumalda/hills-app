@@ -1,9 +1,10 @@
-import { ScrollView, View, Text, Pressable, Linking, useWindowDimensions } from "react-native"
+import { ScrollView, View, Text, Linking, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { PopCard } from "@/components/PopCard"
 import { DotBackground } from "@/components/DotBackground"
 import { SectionTitle } from "@/components/SectionTitle"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { COLORS } from "@/constants/theme"
 import { VENUE, HOURS, SERVICES } from "@/data/info"
 
@@ -27,28 +28,28 @@ export default function Contatti() {
 
         {/* Quick actions */}
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
-          <Pressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.phoneHref)}>
+          <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.phoneHref)}>
             <PopCard bg={COLORS.red} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="call" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>CHIAMA</Text>
             </PopCard>
-          </Pressable>
-          <Pressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.whatsapp)}>
+          </AnimatedPressable>
+          <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.whatsapp)}>
             <PopCard bg={COLORS.green} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="logo-whatsapp" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>WHATSAPP</Text>
             </PopCard>
-          </Pressable>
-          <Pressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.maps)}>
+          </AnimatedPressable>
+          <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.maps)}>
             <PopCard bg={COLORS.yellow} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="navigate" size={26} color={COLORS.ink} />
               <Text style={{ color: COLORS.ink, fontWeight: "900", marginTop: 6, fontSize: 13 }}>MAPPA</Text>
             </PopCard>
-          </Pressable>
+          </AnimatedPressable>
         </View>
 
         {/* Address */}
-        <Pressable onPress={() => Linking.openURL(VENUE.maps)}>
+        <AnimatedPressable onPress={() => Linking.openURL(VENUE.maps)}>
           <PopCard bg={COLORS.cream} style={{ padding: 16, flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 24 }}>
             <View style={{ backgroundColor: COLORS.pink, borderWidth: 2, borderColor: COLORS.ink, borderRadius: 10, width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <Ionicons name="location" size={22} color={COLORS.ink} />
@@ -59,7 +60,7 @@ export default function Contatti() {
             </View>
             <Ionicons name="chevron-forward" size={20} color={COLORS.ink} />
           </PopCard>
-        </Pressable>
+        </AnimatedPressable>
 
         {/* Hours */}
         <SectionTitle accent={COLORS.orange}>ORARI</SectionTitle>

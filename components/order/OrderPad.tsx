@@ -2,7 +2,6 @@ import { useState } from "react"
 import {
   View,
   Text,
-  Pressable,
   TextInput,
   ScrollView,
   Linking,
@@ -14,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useOrder } from "./OrderProvider"
 import { COLORS, FONTS } from "@/constants/theme"
 import { LiquidGlass } from "@/components/LiquidGlass"
+import { AnimatedPressable as Pressable } from "@/components/AnimatedPressable"
 
 export function OrderPad() {
   const { lines, add, remove, clear, total, count, open, setOpen } = useOrder()
@@ -40,8 +40,10 @@ export function OrderPad() {
       lines.length > 0
         ? lines.map((l) => `${l.qty}x ${l.name} — € ${(l.price * l.qty).toFixed(2)}`).join("\n")
         : "Nessun piatto"
-    const message =
-      `Orario di ritiro: ${pickupTime}\n\n` + `Piatti:\n${itemsText}\n\n` + `Totale: € ${finalTotal.toFixed(2)}`
+    const serviceDetails = orderType === "ritiro"
+      ? `Modalità: ritiro\nOrario richiesto: ${pickupTime}`
+      : `Modalità: consumo in locale\nPersone: ${guests}`
+    const message = `${serviceDetails}\n\nPiatti:\n${itemsText}\n\nTotale: € ${finalTotal.toFixed(2)}`
     Linking.openURL(`https://wa.me/393332968401?text=${encodeURIComponent(message)}`)
   }
 
@@ -180,33 +182,37 @@ export function OrderPad() {
           </ScrollView>
 
           <View style={{ borderTopWidth: 2, borderStyle: "dashed", borderColor: "rgba(26,20,15,0.2)", paddingTop: 12, marginTop: 8 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(26,20,15,0.05)", borderRadius: 12, padding: 10, marginBottom: 8 }}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                <Ionicons name="time" size={14} color={COLORS.primary} />
-                <Text style={{ fontFamily: FONTS.display, fontSize: 12, textTransform: "uppercase" }}>Orario ritiro</Text>
-              </View>
-              <TextInput
-                value={pickupTime}
-                onChangeText={setPickupTime}
-                placeholder="20:30"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.85)",
-                  borderWidth: 1,
-                  borderColor: timeError ? "#dc2626" : "rgba(26,20,15,0.15)",
-                  borderRadius: 8,
-                  paddingHorizontal: 10,
-                  paddingVertical: 6,
-                  fontFamily: FONTS.display,
-                  fontSize: 12,
-                  minWidth: 72,
-                  textAlign: "center",
-                }}
-              />
-            </View>
-            {timeError ? (
-              <Text style={{ color: "#dc2626", fontSize: 10, fontFamily: FONTS.sans, marginBottom: 8 }}>
-                Orario consentito 18:00 – 00:30
-              </Text>
+            {orderType === "ritiro" ? (
+              <>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(26,20,15,0.05)", borderRadius: 12, padding: 10, marginBottom: 8 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                    <Ionicons name="time" size={14} color={COLORS.primary} />
+                    <Text style={{ fontFamily: FONTS.display, fontSize: 12, textTransform: "uppercase" }}>Orario ritiro</Text>
+                  </View>
+                  <TextInput
+                    value={pickupTime}
+                    onChangeText={setPickupTime}
+                    placeholder="20:30"
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.85)",
+                      borderWidth: 1,
+                      borderColor: timeError ? "#dc2626" : "rgba(26,20,15,0.15)",
+                      borderRadius: 8,
+                      paddingHorizontal: 10,
+                      paddingVertical: 6,
+                      fontFamily: FONTS.display,
+                      fontSize: 12,
+                      minWidth: 72,
+                      textAlign: "center",
+                    }}
+                  />
+                </View>
+                {timeError ? (
+                  <Text style={{ color: "#dc2626", fontSize: 10, fontFamily: FONTS.sans, marginBottom: 8 }}>
+                    Orario consentito 18:00 – 00:30
+                  </Text>
+                ) : null}
+              </>
             ) : null}
 
             {orderType === "locale" ? (
@@ -256,7 +262,7 @@ export function OrderPad() {
                 </Pressable>
               ) : (
                 <Pressable
-                  onPress={() => Linking.openURL("tel:+393332968401")}
+                  onPress={handleWhatsAppOrder}
                   style={{
                     flex: 1,
                     flexDirection: "row",
@@ -268,9 +274,9 @@ export function OrderPad() {
                     paddingVertical: 12,
                   }}
                 >
-                  <Ionicons name="call" size={16} color={COLORS.sun} />
+                  <Ionicons name="logo-whatsapp" size={16} color={COLORS.sun} />
                   <Text style={{ fontFamily: FONTS.display, fontSize: 12, color: COLORS.sun, textTransform: "uppercase" }}>
-                    Chiama per il tavolo
+                  Ordina su WhatsApp
                   </Text>
                 </Pressable>
               )}

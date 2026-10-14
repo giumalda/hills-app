@@ -1,8 +1,9 @@
 import { useRef, useState } from "react"
-import { ScrollView, View, Text, Pressable } from "react-native"
+import { ScrollView, View, Text } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { MenuCard, type MenuCardItem } from "@/components/MenuCard"
 import { COLORS, FONTS } from "@/constants/theme"
 import {
@@ -22,7 +23,6 @@ type MenuGroup = {
   subtitle: string
   emoji: string
   items: MenuCardItem[]
-  isAllergens?: boolean
 }
 
 const MENU_GROUPS: MenuGroup[] = [
@@ -92,14 +92,6 @@ const MENU_GROUPS: MenuGroup[] = [
       price: item.price,
     })),
   },
-  {
-    id: "allergeni",
-    title: "Tabella allergeni",
-    subtitle: "Elenco degli allergeni presenti nella carta",
-    emoji: "ℹ️",
-    items: [],
-    isAllergens: true,
-  },
 ]
 
 const FEATURED_CHALLENGE = burgers.find((item) => item.isChallenge)
@@ -149,7 +141,7 @@ export default function Menu() {
           {MENU_GROUPS.map((group) => {
             const selected = group.id === activeId
             return (
-              <Pressable
+              <AnimatedPressable
                 key={group.id}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
@@ -170,10 +162,29 @@ export default function Menu() {
                 <Text style={{ fontFamily: FONTS.display, color: selected ? COLORS.sun : COLORS.ink, fontSize: 12 }}>
                   {group.title}
                 </Text>
-              </Pressable>
+              </AnimatedPressable>
             )
           })}
         </ScrollView>
+        <AnimatedPressable
+          accessibilityRole="button"
+          accessibilityLabel="Vai alla tabella allergeni"
+          onPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
+          style={{
+            alignSelf: "center",
+            marginTop: 12,
+            borderWidth: 1,
+            borderColor: "rgba(26,20,15,0.28)",
+            borderRadius: 999,
+            paddingHorizontal: 20,
+            paddingVertical: 8,
+            backgroundColor: "rgba(255,255,255,0.3)",
+          }}
+        >
+          <Text style={{ fontFamily: FONTS.display, color: COLORS.ink, fontSize: 12 }}>
+            TABELLA ALLERGENI
+          </Text>
+        </AnimatedPressable>
       </View>
 
       <ScrollView
@@ -221,54 +232,65 @@ export default function Menu() {
                 </View>
               </View>
 
-              {group.isAllergens ? (
-                <SurfaceCard radius={22} padding={0} style={{ overflow: "hidden" }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      backgroundColor: "rgba(26,20,15,0.06)",
-                      paddingHorizontal: 14,
-                      paddingVertical: 11,
-                      borderBottomWidth: 1,
-                      borderBottomColor: "rgba(26,20,15,0.1)",
-                    }}
-                  >
-                    <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
-                      N°
-                    </Text>
-                    <Text style={{ flex: 1, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
-                      ALLERGENE
-                    </Text>
-                  </View>
-                  {allergeni.map(([number, description], index) => (
-                    <View
-                      key={number}
-                      accessibilityLabel={`${number}. ${description}`}
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "flex-start",
-                        paddingHorizontal: 14,
-                        paddingVertical: 10,
-                        borderBottomWidth: index === allergeni.length - 1 ? 0 : 1,
-                        borderBottomColor: "rgba(26,20,15,0.08)",
-                      }}
-                    >
-                      <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 12, color: COLORS.primary }}>
-                        {number}
-                      </Text>
-                      <Text style={{ flex: 1, fontFamily: FONTS.sansMedium, fontSize: 11, lineHeight: 16, color: "rgba(26,20,15,0.78)" }}>
-                        {description}
-                      </Text>
-                    </View>
-                  ))}
-                </SurfaceCard>
-              ) : (
-                group.items.map((item, index) => (
-                  <MenuCard key={`${group.id}-${item.name}-${index}`} item={item} />
-                ))
-              )}
+              {group.items.map((item, index) => (
+                <MenuCard key={`${group.id}-${item.name}-${index}`} item={item} />
+              ))}
             </View>
           ))}
+
+          <View style={{ marginBottom: 24 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <Text style={{ fontSize: 26 }}>ℹ️</Text>
+              <View>
+                <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.ink }}>
+                  Tabella allergeni
+                </Text>
+                <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, color: "rgba(26,20,15,0.65)" }}>
+                  Elenco degli allergeni presenti nella carta
+                </Text>
+              </View>
+            </View>
+            <SurfaceCard radius={22} padding={0} style={{ overflow: "hidden" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: "rgba(26,20,15,0.06)",
+                  paddingHorizontal: 14,
+                  paddingVertical: 11,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "rgba(26,20,15,0.1)",
+                }}
+              >
+                <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
+                  N°
+                </Text>
+                <Text style={{ flex: 1, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
+                  ALLERGENE
+                </Text>
+              </View>
+              {allergeni.map(([number, description], index) => (
+                <View
+                  key={number}
+                  accessibilityLabel={`${number}. ${description}`}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    paddingHorizontal: 14,
+                    paddingVertical: 10,
+                    borderBottomWidth: index === allergeni.length - 1 ? 0 : 1,
+                    borderBottomColor: "rgba(26,20,15,0.08)",
+                  }}
+                >
+                  <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 12, color: COLORS.primary }}>
+                    {number}
+                  </Text>
+                  <Text style={{ flex: 1, fontFamily: FONTS.sansMedium, fontSize: 11, lineHeight: 16, color: "rgba(26,20,15,0.78)" }}>
+                    {description}
+                  </Text>
+                </View>
+              ))}
+            </SurfaceCard>
+          </View>
         </View>
       </ScrollView>
     </View>

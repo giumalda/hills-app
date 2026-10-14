@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react"
-import { Linking, Pressable, ScrollView, Text, View } from "react-native"
+import { Linking, ScrollView, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { COLORS, FONTS } from "@/constants/theme"
 import { BUILDER_GROUPS, getBuilderLevel } from "@/data/burgerBuilder"
 
@@ -90,7 +91,7 @@ export default function CreateOmero() {
                   {group.options.map((option) => {
                     const selected = selections[group.id]?.includes(option.id) ?? false
                     return (
-                      <Pressable
+                      <AnimatedPressable
                         key={option.id}
                         accessibilityRole="button"
                         accessibilityState={{ selected }}
@@ -115,7 +116,7 @@ export default function CreateOmero() {
                         <Text style={{ fontFamily: FONTS.sansBold, fontSize: 11, color: selected ? COLORS.sun : COLORS.ink }}>
                           {option.name}
                         </Text>
-                      </Pressable>
+                      </AnimatedPressable>
                     )
                   })}
                 </View>
@@ -141,7 +142,7 @@ export default function CreateOmero() {
             <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, color: "rgba(26,20,15,0.55)", marginTop: 6 }}>
               Valori calorici indicativi. Il prezzo viene confermato dal locale.
             </Text>
-            <Pressable
+            <AnimatedPressable
               accessibilityRole="button"
               accessibilityState={{ disabled: selectedOptions.length === 0 }}
               disabled={selectedOptions.length === 0}
@@ -162,7 +163,7 @@ export default function CreateOmero() {
               <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.white, textTransform: "uppercase" }}>
                 Ordina su WhatsApp
               </Text>
-            </Pressable>
+            </AnimatedPressable>
           </SurfaceCard>
         </View>
       </ScrollView>

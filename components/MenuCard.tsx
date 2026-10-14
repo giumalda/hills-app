@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { View, Text, Pressable } from "react-native"
+import { View, Text } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useOrder } from "@/components/order/OrderProvider"
 import { SurfaceCard } from "@/components/SurfaceCard"
+import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { COLORS, FONTS } from "@/constants/theme"
 
 export type MenuCardItem = {
@@ -107,7 +108,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
             const optionPrice = sizePrices[option === "piccola" ? 0 : 1]
             const selected = size === option
             return (
-              <Pressable
+              <AnimatedPressable
                 key={option}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
@@ -122,7 +123,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
                 <Text style={{ fontFamily: FONTS.display, fontSize: 11, color: selected ? COLORS.sun : "rgba(26,20,15,0.7)", textTransform: "uppercase" }}>
                   {option === "piccola" ? "Piccola" : "Grande"} ({formatPrice(optionPrice)})
                 </Text>
-              </Pressable>
+              </AnimatedPressable>
             )
           })}
         </View>
@@ -140,7 +141,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
         }}
       >
         <Text style={{ fontFamily: FONTS.display, fontSize: 18, color: COLORS.ink }}>{formatPrice(effectivePrice)}</Text>
-        <Pressable
+        <AnimatedPressable
           accessibilityRole="button"
           accessibilityLabel={`Aggiungi ${effectiveName} al carrello`}
           onPress={() => {
@@ -161,7 +162,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
           <Text style={{ fontFamily: FONTS.display, fontSize: 12, color: COLORS.sun, textTransform: "uppercase" }}>
             Aggiungi
           </Text>
-        </Pressable>
+        </AnimatedPressable>
       </View>
     </SurfaceCard>
   )
