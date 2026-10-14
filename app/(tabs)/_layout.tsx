@@ -43,6 +43,13 @@ export default function TabsLayout() {
             }}
           />
           <Tabs.Screen
+            name="crea-omero"
+            options={{
+              title: "Crea",
+              tabBarIcon: ({ color, size }) => <Ionicons name="construct" size={size} color={color} />,
+            }}
+          />
+          <Tabs.Screen
             name="galleria"
             options={{
               title: "Galleria",

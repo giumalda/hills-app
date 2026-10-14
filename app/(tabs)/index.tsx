@@ -90,6 +90,9 @@ export default function Home() {
               <View style={{ flex: 1, minWidth: 150 }}>
                 <PopButton label="PRENOTA" icon="calendar" bg={COLORS.red} onPress={() => router.push("/prenota")} />
               </View>
+              <View style={{ flex: 1, minWidth: 150 }}>
+                <PopButton label="CREA OMERO" icon="construct" bg={COLORS.ink} color={COLORS.sun} onPress={() => router.push("/crea-omero")} />
+              </View>
             </View>
           </View>
 
