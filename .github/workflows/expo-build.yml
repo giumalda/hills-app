@@ -1,10 +1,21 @@
 name: Compila iOS e Android
 on:
-  push:
-    branches: [ main ]
+  # Non parte a ogni push: avvialo a mano da Actions → "Compila iOS e Android" → Run workflow
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Cosa compilare"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - both
+          - ios
+          - android
 
 jobs:
   build-ios:
+    if: ${{ inputs.platform == 'both' || inputs.platform == 'ios' }}
     runs-on: macos-latest
     steps:
       - name: Recupera il codice
@@ -50,6 +61,7 @@ jobs:
           path: hillsburger.ipa
 
   build-android:
+    if: ${{ inputs.platform == 'both' || inputs.platform == 'android' }}
     runs-on: ubuntu-latest
     steps:
       - name: Recupera il codice
