@@ -5,10 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { PopCard } from "@/components/PopCard";
 import { PopButton } from "@/components/PopButton";
 import { SectionTitle } from "@/components/SectionTitle";
+import { CloudBackground } from "@/components/CloudBackground";
 import { COLORS } from "@/constants/theme";
 import { VENUE, FEATURES, REVIEWS } from "@/data/info";
-import { useState } from 'react';
-import PostItSemplice from '@/components/PostItSemplice';
 
 export default function Home() {
   const insets = useSafeAreaInsets();
@@ -17,20 +16,12 @@ export default function Home() {
   const isWide = width > 640;
   const featureW = isWide ? (Math.min(width, 900) - 40 - 16) / 2 : (width - 40 - 12) / 2;
 
-  const [mostraPromo, setMostraPromo] = useState(true);
-
   return (
-    <View style={{ flex: 1 }}>
-      {mostraPromo && (
-        <PostItSemplice
-          titolo="Avviso"
-          testo="Prova i nostri nuovi panini fuori menù!"
-          onClose={() => setMostraPromo(false)}
-        />
-      )}
+    <View style={{ flex: 1, backgroundColor: COLORS.sky }}>
+      <CloudBackground />
 
       <ScrollView
-        style={{ backgroundColor: COLORS.sky }}
+        style={{ backgroundColor: "transparent" }}
         contentContainerStyle={{ paddingBottom: 48, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
       >
