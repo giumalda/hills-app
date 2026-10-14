@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { ScrollView, View, Text, Pressable } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { DotBackground } from "@/components/DotBackground"
@@ -22,12 +22,31 @@ type MenuGroup = {
   subtitle: string
   emoji: string
   items: MenuCardItem[]
+  isAllergens?: boolean
 }
 
 const MENU_GROUPS: MenuGroup[] = [
-  { id: "panini", title: "I panini", subtitle: "Scegli il tuo personaggio", emoji: "🍔", items: burgers },
-  { id: "speciali", title: "Speciali", subtitle: "Le novità e i panini fuori serie", emoji: "⭐", items: specials },
-  { id: "combo", title: "Menu combo", subtitle: "Il menu completo a 10 €", emoji: "🍟", items: combos },
+  {
+    id: "panini",
+    title: "Burger",
+    subtitle: "I panini di Springfield",
+    emoji: "🍔",
+    items: burgers.filter((item) => !item.isChallenge),
+  },
+  {
+    id: "speciali",
+    title: "Special Burger",
+    subtitle: "Le novità e i panini fuori serie",
+    emoji: "⭐",
+    items: specials,
+  },
+  {
+    id: "combo",
+    title: "Menu Combo",
+    subtitle: "Il menu completo a 10 €",
+    emoji: "🥤",
+    items: combos,
+  },
   {
     id: "piadine",
     title: "Piadine",
@@ -42,23 +61,25 @@ const MENU_GROUPS: MenuGroup[] = [
   },
   {
     id: "fritture",
-    title: "Fritture",
-    subtitle: `Porzione da ${fritture.note.toLowerCase()}`,
-    emoji: "🍗",
-    items: fritture.items.map((name) => ({ name, desc: fritture.note, price: 6 })),
+    title: "Fritture & Chips",
+    subtitle: "Fritture in porzione da 6 pezzi e patatine",
+    emoji: "🍟",
+    items: [
+      ...fritture.items.map((name) => ({ name, desc: fritture.note, price: 6 })),
+      ...fritture.chips.map((item) => ({
+        name: item.name,
+        desc: "Scegli la porzione piccola o grande.",
+        price: item.price,
+      })),
+    ],
   },
   {
-    id: "patatine",
-    title: "Patatine",
-    subtitle: "Piccole o grandi, scegli tu",
-    emoji: "🍟",
-    items: fritture.chips.map((item) => ({
-      name: item.name,
-      desc: "Scegli la porzione piccola o grande.",
-      price: item.price,
-    })),
+    id: "carne",
+    title: "Piatti di carne",
+    subtitle: "Piatti dalla griglia",
+    emoji: "🥩",
+    items: piattiCarne,
   },
-  { id: "carne", title: "Carne", subtitle: "Piatti dalla griglia", emoji: "🥩", items: piattiCarne },
   {
     id: "insalate",
     title: "Insalate",
@@ -71,12 +92,38 @@ const MENU_GROUPS: MenuGroup[] = [
       price: item.price,
     })),
   },
+  {
+    id: "allergeni",
+    title: "Tabella allergeni",
+    subtitle: "Elenco degli allergeni presenti nella carta",
+    emoji: "ℹ️",
+    items: [],
+    isAllergens: true,
+  },
 ]
+
+const FEATURED_CHALLENGE = burgers.find((item) => item.isChallenge)
 
 export default function Menu() {
   const insets = useSafeAreaInsets()
+  const scrollRef = useRef<ScrollView>(null)
+  const sectionOffsets = useRef<Record<string, number>>({})
   const [activeId, setActiveId] = useState(MENU_GROUPS[0].id)
-  const category = MENU_GROUPS.find((group) => group.id === activeId) ?? MENU_GROUPS[0]
+
+  const scrollToGroup = (group: MenuGroup) => {
+    setActiveId(group.id)
+    scrollRef.current?.scrollTo({
+      y: sectionOffsets.current[group.id] ?? 0,
+      animated: true,
+    })
+  }
+
+  const updateActiveGroup = (offsetY: number) => {
+    const current = MENU_GROUPS.filter(
+      (group) => sectionOffsets.current[group.id] <= offsetY + 100,
+    ).at(-1)
+    if (current) setActiveId(current.id)
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.sun }}>
@@ -89,9 +136,16 @@ export default function Menu() {
           <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 13, color: "rgba(26,20,15,0.7)" }}>
             Qui comanda il panino!
           </Text>
+          <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, color: "rgba(26,20,15,0.6)", marginTop: 4 }}>
+            Numeri originali della carta · * prodotto a temperatura -20°.
+          </Text>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, gap: 8 }}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20, gap: 8 }}
+        >
           {MENU_GROUPS.map((group) => {
             const selected = group.id === activeId
             return (
@@ -99,7 +153,7 @@ export default function Menu() {
                 key={group.id}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
-                onPress={() => setActiveId(group.id)}
+                onPress={() => scrollToGroup(group)}
                 style={{
                   backgroundColor: selected ? COLORS.ink : "rgba(255,255,255,0.76)",
                   borderWidth: 1,
@@ -123,41 +177,98 @@ export default function Menu() {
       </View>
 
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 160, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={(event) => updateActiveGroup(event.nativeEvent.contentOffset.y)}
+        onScrollEndDrag={(event) => updateActiveGroup(event.nativeEvent.contentOffset.y)}
       >
         <View style={{ width: "100%", maxWidth: 900 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 }}>
-            <Text style={{ fontSize: 26 }}>{category.emoji}</Text>
-            <View>
-              <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.ink }}>
-                {category.title}
-              </Text>
-              <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, color: "rgba(26,20,15,0.65)" }}>
-                {category.subtitle}
-              </Text>
-            </View>
-          </View>
-
-          {category.items.map((item, index) => (
-            <MenuCard key={`${category.id}-${item.name}-${index}`} item={item} />
-          ))}
-
-          {category.id === "insalate" ? (
-            <SurfaceCard radius={22} padding={16}>
-              <Text style={{ fontFamily: FONTS.display, fontSize: 17, color: COLORS.ink, marginBottom: 8 }}>
-                Allergeni
-              </Text>
-              {allergeni.map(([number, description]) => (
-                <Text
-                  key={number}
-                  style={{ fontFamily: FONTS.sansMedium, fontSize: 11, lineHeight: 16, color: "rgba(26,20,15,0.72)", marginBottom: 4 }}
-                >
-                  {number}. {description}
+          {FEATURED_CHALLENGE ? (
+            <View style={{ marginBottom: 22 }}>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontFamily: FONTS.display, fontSize: 13, color: COLORS.primary, letterSpacing: 1 }}>
+                  CHALLENGE · N. 49 BIG SIMPSON
                 </Text>
-              ))}
-            </SurfaceCard>
+                <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.ink }}>
+                  IL PANINO SFIDA HILL&apos;S
+                </Text>
+                <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, lineHeight: 18, color: "rgba(26,20,15,0.72)" }}>
+                  Chiudi la griglia in 20 minuti o non lo paghi. Porzioni da record, zero scuse.
+                </Text>
+              </View>
+              <MenuCard item={FEATURED_CHALLENGE} />
+            </View>
           ) : null}
+
+          {MENU_GROUPS.map((group) => (
+            <View
+              key={group.id}
+              onLayout={(event) => {
+                sectionOffsets.current[group.id] = event.nativeEvent.layout.y
+              }}
+              style={{ marginBottom: 24 }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                <Text style={{ fontSize: 26 }}>{group.emoji}</Text>
+                <View>
+                  <Text style={{ fontFamily: FONTS.display, fontSize: 22, color: COLORS.ink }}>
+                    {group.title}
+                  </Text>
+                  <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, color: "rgba(26,20,15,0.65)" }}>
+                    {group.subtitle}
+                  </Text>
+                </View>
+              </View>
+
+              {group.isAllergens ? (
+                <SurfaceCard radius={22} padding={0} style={{ overflow: "hidden" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      backgroundColor: "rgba(26,20,15,0.06)",
+                      paddingHorizontal: 14,
+                      paddingVertical: 11,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "rgba(26,20,15,0.1)",
+                    }}
+                  >
+                    <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
+                      N°
+                    </Text>
+                    <Text style={{ flex: 1, fontFamily: FONTS.display, fontSize: 11, color: COLORS.ink }}>
+                      ALLERGENE
+                    </Text>
+                  </View>
+                  {allergeni.map(([number, description], index) => (
+                    <View
+                      key={number}
+                      accessibilityLabel={`${number}. ${description}`}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                        paddingHorizontal: 14,
+                        paddingVertical: 10,
+                        borderBottomWidth: index === allergeni.length - 1 ? 0 : 1,
+                        borderBottomColor: "rgba(26,20,15,0.08)",
+                      }}
+                    >
+                      <Text style={{ width: 44, fontFamily: FONTS.display, fontSize: 12, color: COLORS.primary }}>
+                        {number}
+                      </Text>
+                      <Text style={{ flex: 1, fontFamily: FONTS.sansMedium, fontSize: 11, lineHeight: 16, color: "rgba(26,20,15,0.78)" }}>
+                        {description}
+                      </Text>
+                    </View>
+                  ))}
+                </SurfaceCard>
+              ) : (
+                group.items.map((item, index) => (
+                  <MenuCard key={`${group.id}-${item.name}-${index}`} item={item} />
+                ))
+              )}
+            </View>
+          ))}
         </View>
       </ScrollView>
     </View>

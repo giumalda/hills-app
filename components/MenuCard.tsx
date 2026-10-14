@@ -46,7 +46,13 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
       padding={16}
       style={{
         marginBottom: 12,
-        ...(item.isChallenge ? { backgroundColor: "rgba(230,57,43,0.12)" } : {}),
+        ...(item.isChallenge
+          ? {
+              backgroundColor: "#FFF0EB",
+              borderColor: "rgba(230,57,43,0.38)",
+              borderWidth: 2,
+            }
+          : {}),
       }}
     >
       <View style={{ flexDirection: "row", gap: 10, alignItems: "flex-start" }}>
@@ -72,7 +78,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
               style={{
                 fontFamily: FONTS.display,
                 fontSize: 17,
-                color: COLORS.ink,
+                color: item.isChallenge ? COLORS.primary : COLORS.ink,
                 textTransform: "uppercase",
                 flexShrink: 1,
               }}
