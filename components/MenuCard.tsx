@@ -2,7 +2,7 @@ import { useState } from "react"
 import { View, Text, Pressable } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useOrder } from "@/components/order/OrderProvider"
-import { GlassCard } from "@/components/GlassCard"
+import { SurfaceCard } from "@/components/SurfaceCard"
 import { COLORS, FONTS } from "@/constants/theme"
 
 export type MenuCardItem = {
@@ -41,7 +41,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
   const effectiveName = hasSizes ? `${item.name} (${size === "piccola" ? "Piccola" : "Grande"})` : item.name
 
   return (
-    <GlassCard
+    <SurfaceCard
       radius={22}
       padding={16}
       style={{
@@ -157,6 +157,6 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
           </Text>
         </Pressable>
       </View>
-    </GlassCard>
+    </SurfaceCard>
   )
 }

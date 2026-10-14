@@ -2,7 +2,7 @@ import { useState } from "react"
 import { ScrollView, View, Text, Pressable } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { DotBackground } from "@/components/DotBackground"
-import { GlassCard } from "@/components/GlassCard"
+import { SurfaceCard } from "@/components/SurfaceCard"
 import { MenuCard, type MenuCardItem } from "@/components/MenuCard"
 import { COLORS, FONTS } from "@/constants/theme"
 import {
@@ -144,7 +144,7 @@ export default function Menu() {
           ))}
 
           {category.id === "insalate" ? (
-            <GlassCard radius={22} padding={16}>
+            <SurfaceCard radius={22} padding={16}>
               <Text style={{ fontFamily: FONTS.display, fontSize: 17, color: COLORS.ink, marginBottom: 8 }}>
                 Allergeni
               </Text>
@@ -156,7 +156,7 @@ export default function Menu() {
                   {number}. {description}
                 </Text>
               ))}
-            </GlassCard>
+            </SurfaceCard>
           ) : null}
         </View>
       </ScrollView>

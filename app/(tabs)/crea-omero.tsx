@@ -3,7 +3,7 @@ import { Linking, Pressable, ScrollView, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { DotBackground } from "@/components/DotBackground"
-import { GlassCard } from "@/components/GlassCard"
+import { SurfaceCard } from "@/components/SurfaceCard"
 import { COLORS, FONTS } from "@/constants/theme"
 import { BUILDER_GROUPS, getBuilderLevel } from "@/data/burgerBuilder"
 
@@ -74,7 +74,7 @@ export default function CreateOmero() {
 
           <View style={{ gap: 12 }}>
             {BUILDER_GROUPS.map((group, groupIndex) => (
-              <GlassCard key={group.id} radius={22} padding={16}>
+              <SurfaceCard key={group.id} radius={22} padding={16}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   <Text style={{ fontSize: 20 }}>{group.emoji}</Text>
                   <Text style={{ fontFamily: FONTS.display, fontSize: 19, color: COLORS.ink }}>
@@ -119,11 +119,11 @@ export default function CreateOmero() {
                     )
                   })}
                 </View>
-              </GlassCard>
+              </SurfaceCard>
             ))}
           </View>
 
-          <GlassCard radius={24} padding={18} style={{ marginTop: 14 }}>
+          <SurfaceCard radius={24} padding={18} style={{ marginTop: 14 }}>
             <Text style={{ fontFamily: FONTS.display, fontSize: 21, color: COLORS.ink }}>
               Il tuo panino 🍔
             </Text>
@@ -163,7 +163,7 @@ export default function CreateOmero() {
                 Ordina su WhatsApp
               </Text>
             </Pressable>
-          </GlassCard>
+          </SurfaceCard>
         </View>
       </ScrollView>
     </View>

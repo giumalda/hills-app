@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useOrder } from "./OrderProvider"
 import { COLORS, FONTS } from "@/constants/theme"
+import { LiquidGlass } from "@/components/LiquidGlass"
 
 export function OrderPad() {
   const { lines, add, remove, clear, total, count, open, setOpen } = useOrder()
@@ -47,46 +48,42 @@ export function OrderPad() {
   return (
     <>
       {!open ? (
-        <Pressable
-          onPress={() => setOpen(true)}
+        <LiquidGlass
+          intensity={76}
+          tintColor="rgba(255,255,255,0.5)"
           style={{
             position: "absolute",
             left: 16,
-            bottom: Platform.OS === "web" ? 80 : insets.bottom + 72,
+            bottom: Platform.OS === "web" ? 92 : insets.bottom + 88,
             zIndex: 90,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 8,
-            backgroundColor: "rgba(255,255,255,0.82)",
-            borderWidth: 1,
-            borderColor: "rgba(255,255,255,0.95)",
             borderRadius: 999,
-            paddingHorizontal: 14,
-            paddingVertical: 10,
-            shadowColor: "#000",
-            shadowOpacity: 0.14,
-            shadowRadius: 16,
-            shadowOffset: { width: 0, height: 8 },
-            elevation: 5,
-            ...(Platform.OS === "web"
-              ? {
-                  backdropFilter: "blur(12px) saturate(140%)",
-                  WebkitBackdropFilter: "blur(12px) saturate(140%)",
-                }
-              : {}),
           }}
         >
-          <Ionicons name="bag-handle-outline" size={18} color={COLORS.ink} />
-          <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.ink, textTransform: "uppercase" }}>
-            Carrello
-          </Text>
-          <Text style={{ fontFamily: FONTS.sansBold, color: COLORS.ink, fontSize: 12 }}>
-            € {total.toFixed(2).replace(".", ",")}
-          </Text>
-          <View style={{ backgroundColor: COLORS.primary, borderRadius: 999, minWidth: 22, alignItems: "center", paddingHorizontal: 6, paddingVertical: 2 }}>
-            <Text style={{ fontFamily: FONTS.display, color: COLORS.white, fontSize: 12 }}>{count}</Text>
-          </View>
-        </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Apri carrello, ${count} articoli, totale ${total.toFixed(2)} euro`}
+            onPress={() => setOpen(true)}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+              borderRadius: 999,
+              paddingHorizontal: 14,
+              paddingVertical: 10,
+            }}
+          >
+            <Ionicons name="bag-handle-outline" size={18} color={COLORS.ink} />
+            <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.ink, textTransform: "uppercase" }}>
+              Carrello
+            </Text>
+            <Text style={{ fontFamily: FONTS.sansBold, color: COLORS.ink, fontSize: 12 }}>
+              € {total.toFixed(2).replace(".", ",")}
+            </Text>
+            <View style={{ backgroundColor: COLORS.primary, borderRadius: 999, minWidth: 22, alignItems: "center", paddingHorizontal: 6, paddingVertical: 2 }}>
+              <Text style={{ fontFamily: FONTS.display, color: COLORS.white, fontSize: 12 }}>{count}</Text>
+            </View>
+          </Pressable>
+        </LiquidGlass>
       ) : null}
 
       <Modal visible={open} animationType="slide" transparent onRequestClose={() => setOpen(false)}>

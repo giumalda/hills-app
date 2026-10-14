@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { PopButton } from "@/components/PopButton";
 import { SectionTitle } from "@/components/SectionTitle";
 import { DotBackground } from "@/components/DotBackground";
-import { GlassCard } from "@/components/GlassCard";
+import { SurfaceCard } from "@/components/SurfaceCard";
 import { COLORS, FONTS } from "@/constants/theme";
 import { VENUE, FEATURES, REVIEWS } from "@/data/info";
 
@@ -22,7 +22,7 @@ export default function Home() {
 
       <ScrollView
         style={{ backgroundColor: "transparent" }}
-        contentContainerStyle={{ paddingBottom: 48, alignItems: "center" }}
+        contentContainerStyle={{ paddingBottom: 150, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ width: "100%", maxWidth: 900, paddingTop: insets.top + 12 }}>
@@ -79,9 +79,9 @@ export default function Home() {
           </View>
 
           <View style={{ paddingHorizontal: 20 }}>
-            <GlassCard padding={18}>
+            <SurfaceCard padding={18}>
               <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 16, lineHeight: 24, color: COLORS.ink }}>{VENUE.intro}</Text>
-            </GlassCard>
+            </SurfaceCard>
 
             <View style={{ flexDirection: "row", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
               <View style={{ flex: 1, minWidth: 150 }}>
@@ -100,11 +100,11 @@ export default function Home() {
             <SectionTitle accent={COLORS.pink}>IL LOCALE</SectionTitle>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
               {FEATURES.map((f) => (
-                <GlassCard key={f.title} style={{ width: featureW }} padding={14}>
+                <SurfaceCard key={f.title} style={{ width: featureW }} padding={14}>
                   <Text style={{ fontSize: 30 }}>{f.emoji}</Text>
                   <Text style={{ fontFamily: FONTS.display, fontSize: 15, color: COLORS.ink, marginTop: 6 }}>{f.title}</Text>
                   <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 12, color: "rgba(17,17,17,0.7)", marginTop: 4, lineHeight: 17 }}>{f.desc}</Text>
-                </GlassCard>
+                </SurfaceCard>
               ))}
             </View>
           </View>
@@ -119,7 +119,7 @@ export default function Home() {
               contentContainerStyle={{ paddingHorizontal: 20, gap: 12 }}
             >
               {REVIEWS.map((r) => (
-                <GlassCard key={r.name} style={{ width: 260 }} padding={16}>
+                <SurfaceCard key={r.name} style={{ width: 260 }} padding={16}>
                   <View style={{ flexDirection: "row", gap: 2, marginBottom: 8 }}>
                     {Array.from({ length: r.stars }).map((_, i) => (
                       <Ionicons key={i} name="star" size={16} color={COLORS.orange} />
@@ -127,13 +127,13 @@ export default function Home() {
                   </View>
                   <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 14, lineHeight: 20, color: COLORS.ink }}>{r.text}</Text>
                   <Text style={{ fontFamily: FONTS.display, fontSize: 13, color: COLORS.red, marginTop: 10 }}>{r.name}</Text>
-                </GlassCard>
+                </SurfaceCard>
               ))}
             </ScrollView>
           </View>
 
           <View style={{ paddingHorizontal: 20, marginTop: 34 }}>
-            <GlassCard padding={18}>
+            <SurfaceCard padding={18}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                 <Ionicons name="logo-whatsapp" size={38} color={COLORS.green} />
                 <View style={{ flex: 1 }}>
@@ -142,7 +142,7 @@ export default function Home() {
                 </View>
                 <PopButton label="APRI" bg={COLORS.green} color={COLORS.white} onPress={() => Linking.openURL(VENUE.whatsapp)} />
               </View>
-            </GlassCard>
+            </SurfaceCard>
           </View>
 
         </View>
