@@ -9,7 +9,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/app-icon-foreground.png",
+      "image": "./assets/images/hills-logo-black.png",
       "imageWidth": 260,
       "backgroundColor": "#FFD90F",
       "resizeMode": "contain"
@@ -30,7 +30,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/app-icon-foreground.png",
         "monochromeImage": "./assets/images/app-icon-monochrome.png",
-        "backgroundColor": "#FFD90F"
+        "backgroundColor": "#000000"
       },
       "package": "com.giumalda.hillsburger"
     },
