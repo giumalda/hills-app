@@ -77,14 +77,16 @@ jobs:
           cp -R "$APP_PATH" ipa/Payload/
           cd ipa
           zip -qry ../Hills-Burger-unsigned.ipa Payload
+          unzip -t ../Hills-Burger-unsigned.ipa
+          unzip -Z1 ../Hills-Burger-unsigned.ipa | grep -Eq '^Payload/[^/]+\.app/Info\.plist$'
           echo "## IPA iOS non firmato" >> "$GITHUB_STEP_SUMMARY"
-          echo "Il file è scaricabile ma non installabile direttamente su iPhone: per installarlo serve una firma Apple Developer e un provisioning profile." >> "$GITHUB_STEP_SUMMARY"
+          echo "Il file IPA è validato ma non firmato; trascinalo in Sideloadly e firmalo con il tuo Apple ID prima dell'installazione. Per distribuirlo senza sideloading servono certificato Apple Developer e provisioning profile." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Rendi l'IPA scaricabile su GitHub
-        uses: actions/upload-artifact@v4
+      - name: Pubblica l'IPA scaricabile direttamente
+        uses: actions/upload-artifact@v7
         with:
-          name: Hills-Burger-iOS-unsigned-IPA
           path: Hills-Burger-unsigned.ipa
+          archive: false
           if-no-files-found: error
           retention-days: 14
 
@@ -126,10 +128,10 @@ jobs:
           fi
           cp "$APK_PATH" ../Hills-Burger.apk
 
-      - name: Rendi l'APK scaricabile su GitHub
-        uses: actions/upload-artifact@v4
+      - name: Pubblica l'APK scaricabile direttamente
+        uses: actions/upload-artifact@v7
         with:
-          name: Hills-Burger-Android-APK
           path: Hills-Burger.apk
+          archive: false
           if-no-files-found: error
           retention-days: 14
