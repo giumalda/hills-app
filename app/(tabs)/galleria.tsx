@@ -9,34 +9,8 @@ const IMAGES: { src: ImageSourcePropType; title: string; tag: string; bg: string
   { src: require("@/assets/images/gallery-smash.png"), title: "Deconstructed Smash", tag: "BURGER", bg: COLORS.white },
   { src: require("@/assets/images/gallery-onion.png"), title: "Anelloni di Cipolla", tag: "FRITTURE", bg: COLORS.white },
   { src: require("@/assets/images/gallery-chips.png"), title: "Burger & Chips", tag: "LOCALE", bg: COLORS.white },
-  {
-    src: { uri: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=720&q=80" },
-    title: "Double cheese burger",
-    tag: "BURGER",
-    bg: COLORS.white,
-    credit: "Foto illustrativa · Unsplash",
-  },
-  {
-    src: { uri: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=720&q=80" },
-    title: "Atmosfera da pub",
-    tag: "LOCALE",
-    bg: COLORS.white,
-    credit: "Foto illustrativa · Unsplash",
-  },
-  {
-    src: { uri: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=720&q=80" },
-    title: "Patatine croccanti",
-    tag: "FRITTURE",
-    bg: COLORS.white,
-    credit: "Foto illustrativa · Unsplash",
-  },
-  {
-    src: { uri: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=720&q=80" },
-    title: "A tavola insieme",
-    tag: "LOCALE",
-    bg: COLORS.white,
-    credit: "Foto illustrativa · Unsplash",
-  },
+  { src: require("@/assets/images/smash-burger.jpg"), title: "Smash Burger", tag: "BURGER", bg: COLORS.white },
+  { src: require("@/assets/images/porchetta-panino.jpg"), title: "Panino con porchetta", tag: "BURGER", bg: COLORS.white },
 ]
 
 const TAG_COLORS: Record<string, string> = {
@@ -66,17 +40,9 @@ export default function Galleria() {
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
           {IMAGES.map((img) => (
             <PopCard key={img.title} bg={img.bg} style={{ width: cardW, padding: 0, overflow: "hidden" }}>
-              <Image
-                source={img.src}
-                accessibilityLabel={img.credit ? `${img.title}, foto illustrativa da Unsplash` : img.title}
-                style={{ width: "100%", height: 200 }}
-                resizeMode="cover"
-              />
+              <Image source={img.src} accessibilityLabel={img.title} style={{ width: "100%", height: 200 }} resizeMode="cover" />
               <View style={{ padding: 14, borderTopWidth: 3, borderTopColor: COLORS.ink, flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: COLORS.cream }}>
-                <View style={{ flex: 1, marginRight: 8 }}>
-                  <Text style={{ fontSize: 15, fontWeight: "900", color: COLORS.ink }}>{img.title}</Text>
-                  {img.credit ? <Text style={{ fontSize: 9, color: "rgba(26,20,15,0.55)", marginTop: 2 }}>{img.credit}</Text> : null}
-                </View>
+                <Text style={{ fontSize: 15, fontWeight: "900", color: COLORS.ink }}>{img.title}</Text>
                 <View style={{ backgroundColor: TAG_COLORS[img.tag], borderWidth: 2, borderColor: COLORS.ink, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 }}>
                   <Text style={{ fontSize: 10, fontWeight: "900", color: img.tag === "LOCALE" ? COLORS.ink : COLORS.white }}>{img.tag}</Text>
                 </View>
