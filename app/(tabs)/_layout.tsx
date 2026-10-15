@@ -1,6 +1,14 @@
 import { Tabs } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import { Platform, StyleSheet, View } from "react-native"
+import Animated, {
+  ReduceMotion,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
+import { useEffect } from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { COLORS, FONTS } from "@/constants/theme"
 import { OrderPad } from "@/components/order/OrderPad"
@@ -121,14 +129,32 @@ function TabIcon({
   size: number
   focused: boolean
 }) {
+  const scale = useSharedValue(1)
+  const reduceMotion = useReducedMotion()
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: reduceMotion ? 1 : scale.value }],
+  }), [reduceMotion])
+
+  useEffect(() => {
+    scale.value = withSpring(focused ? 1.08 : 1, {
+      damping: 14,
+      stiffness: 240,
+      reduceMotion: ReduceMotion.System,
+    })
+  }, [focused, scale])
+
   const icon = <Ionicons name={name} size={size} color={color} />
 
   return focused ? (
-    <LiquidGlass intensity={36} tintColor="rgba(255,217,15,0.72)" style={styles.activeIcon}>
-      {icon}
-    </LiquidGlass>
+    <Animated.View style={animatedStyle}>
+      <LiquidGlass intensity={36} tintColor="rgba(255,217,15,0.72)" style={styles.activeIcon}>
+        {icon}
+      </LiquidGlass>
+    </Animated.View>
   ) : (
-    <View style={styles.iconContainer}>{icon}</View>
+    <Animated.View style={animatedStyle}>
+      <View style={styles.iconContainer}>{icon}</View>
+    </Animated.View>
   )
 }
 

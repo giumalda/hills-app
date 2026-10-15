@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import { ScrollView, View, Text } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
@@ -133,7 +134,10 @@ export default function Menu() {
     <View style={{ flex: 1, backgroundColor: COLORS.sun }}>
       <DotBackground />
       <View style={{ paddingTop: insets.top + 12, paddingBottom: 12 }}>
-        <View style={{ paddingHorizontal: 20, marginBottom: 12 }}>
+        <Animated.View
+          entering={FadeInDown.duration(320).reduceMotion(ReduceMotion.System)}
+          style={{ paddingHorizontal: 20, marginBottom: 12 }}
+        >
           <Text style={{ fontFamily: FONTS.display, fontSize: 34, lineHeight: 38, color: COLORS.ink }}>
             IL MENU
           </Text>
@@ -143,8 +147,9 @@ export default function Menu() {
           <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, color: "rgba(26,20,15,0.6)", marginTop: 4 }}>
             Numeri originali della carta · * prodotto a temperatura -20°.
           </Text>
-        </View>
+        </Animated.View>
 
+        <Animated.View entering={FadeInDown.delay(50).duration(320).reduceMotion(ReduceMotion.System)}>
         <ScrollView
           ref={categoryScrollRef}
           horizontal
@@ -203,6 +208,7 @@ export default function Menu() {
             TABELLA ALLERGENI
           </Text>
         </AnimatedPressable>
+        </Animated.View>
       </View>
 
       <ScrollView
@@ -216,7 +222,10 @@ export default function Menu() {
       >
         <View style={{ width: "100%", maxWidth: 900 }}>
           {FEATURED_CHALLENGE ? (
-            <View style={{ marginBottom: 22 }}>
+            <Animated.View
+              entering={FadeInDown.duration(360).reduceMotion(ReduceMotion.System)}
+              style={{ marginBottom: 22 }}
+            >
               <View style={{ marginBottom: 10 }}>
                 <Text style={{ fontFamily: FONTS.display, fontSize: 13, color: COLORS.primary, letterSpacing: 1 }}>
                   CHALLENGE · N. 49 BIG SIMPSON
@@ -229,12 +238,13 @@ export default function Menu() {
                 </Text>
               </View>
               <MenuCard item={FEATURED_CHALLENGE} />
-            </View>
+            </Animated.View>
           ) : null}
 
-          {MENU_GROUPS.map((group) => (
-            <View
+          {MENU_GROUPS.map((group, groupIndex) => (
+            <Animated.View
               key={group.id}
+              entering={FadeInDown.delay(groupIndex * 55).duration(340).reduceMotion(ReduceMotion.System)}
               onLayout={(event) => {
                 sectionOffsets.current[group.id] = event.nativeEvent.layout.y
               }}
@@ -255,10 +265,13 @@ export default function Menu() {
               {group.items.map((item, index) => (
                 <MenuCard key={`${group.id}-${item.name}-${index}`} item={item} />
               ))}
-            </View>
+            </Animated.View>
           ))}
 
-          <View style={{ marginBottom: 24 }}>
+          <Animated.View
+            entering={FadeInDown.delay(MENU_GROUPS.length * 55).duration(340).reduceMotion(ReduceMotion.System)}
+            style={{ marginBottom: 24 }}
+          >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <Text style={{ fontSize: 26 }}>ℹ️</Text>
               <View>
@@ -310,7 +323,7 @@ export default function Menu() {
                 </View>
               ))}
             </SurfaceCard>
-          </View>
+          </Animated.View>
         </View>
       </ScrollView>
     </View>

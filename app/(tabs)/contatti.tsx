@@ -1,6 +1,7 @@
 import { Platform, ScrollView, View, Text, Linking, useWindowDimensions } from "react-native"
 import { WebView } from "react-native-webview"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { Ionicons } from "@expo/vector-icons"
 import { PopCard } from "@/components/PopCard"
 import { DotBackground } from "@/components/DotBackground"
@@ -28,7 +29,10 @@ export default function Contatti() {
         <Text style={{ fontSize: 15, fontWeight: "700", color: COLORS.ink, opacity: 0.8, marginBottom: 20 }}>{VENUE.fullName}</Text>
 
         {/* Quick actions */}
-        <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
+        <Animated.View
+          entering={FadeInDown.duration(340).reduceMotion(ReduceMotion.System)}
+          style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}
+        >
           <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.phoneHref)}>
             <PopCard bg={COLORS.red} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="call" size={26} color={COLORS.white} />
@@ -41,8 +45,9 @@ export default function Contatti() {
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>WHATSAPP</Text>
             </PopCard>
           </AnimatedPressable>
-        </View>
+        </Animated.View>
 
+        <Animated.View entering={FadeInDown.delay(70).duration(340).reduceMotion(ReduceMotion.System)}>
         <PopCard bg={COLORS.cream} style={{ padding: 16, flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 12 }}>
             <View style={{ backgroundColor: COLORS.pink, borderWidth: 2, borderColor: COLORS.ink, borderRadius: 10, width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <Ionicons name="location" size={22} color={COLORS.ink} />
@@ -52,8 +57,12 @@ export default function Contatti() {
               <Text style={{ fontSize: 15, fontWeight: "900", color: COLORS.ink }}>{VENUE.address}</Text>
             </View>
         </PopCard>
+        </Animated.View>
 
-        <View style={{ height: 240, overflow: "hidden", borderRadius: 22, borderWidth: 2, borderColor: COLORS.ink, marginBottom: 24 }}>
+        <Animated.View
+          entering={FadeInDown.delay(120).duration(340).reduceMotion(ReduceMotion.System)}
+          style={{ height: 240, overflow: "hidden", borderRadius: 22, borderWidth: 2, borderColor: COLORS.ink, marginBottom: 24 }}
+        >
           {Platform.OS === "web" ? (
             <iframe
               title="Mappa di Hill's Burger a Mottola"
@@ -70,28 +79,33 @@ export default function Contatti() {
               style={{ flex: 1 }}
             />
           )}
-        </View>
+        </Animated.View>
 
         <SectionTitle accent={COLORS.pink}>SEGUICI</SectionTitle>
         <View style={{ flexDirection: "row", gap: 10, marginBottom: 24 }}>
-          {SOCIAL_LINKS.map((social) => (
-            <AnimatedPressable
+          {SOCIAL_LINKS.map((social, index) => (
+            <Animated.View
               key={social.title}
-              accessibilityRole="link"
-              accessibilityLabel={social.title}
-              onPress={() => Linking.openURL(social.url)}
+              entering={FadeInDown.delay(index * 55).duration(320).reduceMotion(ReduceMotion.System)}
               style={{ flex: 1 }}
             >
-              <PopCard glass style={{ padding: 13, alignItems: "center" }}>
-                <Ionicons name={social.icon} size={25} color={social.color} />
-                <Text style={{ fontSize: 10, fontWeight: "900", color: COLORS.ink, marginTop: 5 }}>{social.title}</Text>
-              </PopCard>
-            </AnimatedPressable>
+              <AnimatedPressable
+                accessibilityRole="link"
+                accessibilityLabel={social.title}
+                onPress={() => Linking.openURL(social.url)}
+              >
+                <PopCard glass style={{ padding: 13, alignItems: "center" }}>
+                  <Ionicons name={social.icon} size={25} color={social.color} />
+                  <Text style={{ fontSize: 10, fontWeight: "900", color: COLORS.ink, marginTop: 5 }}>{social.title}</Text>
+                </PopCard>
+              </AnimatedPressable>
+            </Animated.View>
           ))}
         </View>
 
         {/* Hours */}
         <SectionTitle accent={COLORS.orange}>ORARI</SectionTitle>
+        <Animated.View entering={FadeInDown.delay(150).duration(340).reduceMotion(ReduceMotion.System)}>
         <PopCard bg={COLORS.white} style={{ padding: 8, marginBottom: 24 }}>
           {HOURS.map((h, i) => {
             const isToday = i === todayIdx
@@ -124,16 +138,23 @@ export default function Contatti() {
             )
           })}
         </PopCard>
+        </Animated.View>
 
         {/* Services */}
         <SectionTitle accent={COLORS.pink}>SERVIZI</SectionTitle>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-          {SERVICES.map((s) => (
-            <PopCard key={s.title} bg={COLORS.cream} style={{ width: serviceW, padding: 12 }}>
-              <Text style={{ fontSize: 24 }}>{s.emoji}</Text>
-              <Text style={{ fontSize: 13, fontWeight: "900", color: COLORS.ink, marginTop: 4 }}>{s.title}</Text>
-              <Text style={{ fontSize: 11, color: "rgba(17,17,17,0.6)", marginTop: 2 }}>{s.desc}</Text>
-            </PopCard>
+          {SERVICES.map((s, index) => (
+            <Animated.View
+              key={s.title}
+              entering={FadeInDown.delay(index * 45).duration(320).reduceMotion(ReduceMotion.System)}
+              style={{ width: serviceW }}
+            >
+              <PopCard bg={COLORS.cream} style={{ padding: 12 }}>
+                <Text style={{ fontSize: 24 }}>{s.emoji}</Text>
+                <Text style={{ fontSize: 13, fontWeight: "900", color: COLORS.ink, marginTop: 4 }}>{s.title}</Text>
+                <Text style={{ fontSize: 11, color: "rgba(17,17,17,0.6)", marginTop: 2 }}>{s.desc}</Text>
+              </PopCard>
+            </Animated.View>
           ))}
         </View>
       </View>

@@ -123,8 +123,9 @@ export default function Home() {
             </View>
           </Animated.View>
 
-          <Link href="/coupon" asChild>
-            <AnimatedPressable accessibilityRole="button" style={{ marginTop: 22 }}>
+          <Animated.View entering={FadeInDown.delay(100).duration(380).reduceMotion(ReduceMotion.System)}>
+            <Link href="/coupon" asChild>
+              <AnimatedPressable accessibilityRole="button" style={{ marginTop: 22 }}>
               <LiquidGlass
                 intensity={54}
                 tintColor="rgba(255,248,216,0.55)"
@@ -153,8 +154,9 @@ export default function Home() {
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.ink} />
               </LiquidGlass>
-            </AnimatedPressable>
-          </Link>
+              </AnimatedPressable>
+            </Link>
+          </Animated.View>
 
           <View style={{ marginTop: 24 }}>
             <Text style={{ fontFamily: FONTS.display, fontSize: 20, color: COLORS.ink, marginBottom: 11 }}>
@@ -190,20 +192,25 @@ export default function Home() {
               BENVENUTI A SPRINGFIELD
             </Text>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-              {FEATURES.map((feature) => (
-                <SurfaceCard
+              {FEATURES.map((feature, index) => (
+                <Animated.View
                   key={feature.title}
-                  padding={14}
-                  style={{ width: isWide ? (Math.min(width, 900) - 52) / 2 : (width - 52) / 2, minHeight: 112 }}
+                  entering={FadeInDown.delay(index * 65).duration(360).reduceMotion(ReduceMotion.System)}
+                  style={{ width: isWide ? (Math.min(width, 900) - 52) / 2 : (width - 52) / 2 }}
                 >
-                  <Text style={{ fontSize: 25 }}>{feature.emoji}</Text>
-                  <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.ink, marginTop: 5 }}>
-                    {feature.title}
-                  </Text>
-                  <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, lineHeight: 15, color: "rgba(26,20,15,0.68)", marginTop: 3 }}>
-                    {feature.desc}
-                  </Text>
-                </SurfaceCard>
+                  <SurfaceCard
+                    padding={14}
+                    style={{ minHeight: 112 }}
+                  >
+                    <Text style={{ fontSize: 25 }}>{feature.emoji}</Text>
+                    <Text style={{ fontFamily: FONTS.display, fontSize: 14, color: COLORS.ink, marginTop: 5 }}>
+                      {feature.title}
+                    </Text>
+                    <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 10, lineHeight: 15, color: "rgba(26,20,15,0.68)", marginTop: 3 }}>
+                      {feature.desc}
+                    </Text>
+                  </SurfaceCard>
+                </Animated.View>
               ))}
             </View>
           </View>

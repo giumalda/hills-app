@@ -2,6 +2,7 @@ import { useMemo, useState } from "react"
 import { Linking, ScrollView, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
@@ -64,18 +65,25 @@ export default function CreateOmero() {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ width: "100%", maxWidth: 900 }}>
-          <View style={{ alignItems: "center", marginBottom: 20 }}>
+          <Animated.View
+            entering={FadeInDown.duration(340).reduceMotion(ReduceMotion.System)}
+            style={{ alignItems: "center", marginBottom: 20 }}
+          >
             <Text style={{ fontFamily: FONTS.display, fontSize: 32, lineHeight: 38, color: COLORS.ink, textAlign: "center" }}>
               CREA IL TUO OMERO
             </Text>
             <Text style={{ fontFamily: FONTS.sansMedium, fontSize: 13, lineHeight: 20, color: "rgba(26,20,15,0.72)", textAlign: "center", marginTop: 4 }}>
               Scegli pane, carne, formaggi, extra e salse. Costruisci la tua torre di sapore!
             </Text>
-          </View>
+          </Animated.View>
 
           <View style={{ gap: 12 }}>
             {BUILDER_GROUPS.map((group, groupIndex) => (
-              <SurfaceCard key={group.id} radius={22} padding={16}>
+              <Animated.View
+                key={group.id}
+                entering={FadeInDown.delay(groupIndex * 55).duration(340).reduceMotion(ReduceMotion.System)}
+              >
+                <SurfaceCard radius={22} padding={16}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   <Text style={{ fontSize: 20 }}>{group.emoji}</Text>
                   <Text style={{ fontFamily: FONTS.display, fontSize: 19, color: COLORS.ink }}>
@@ -121,10 +129,14 @@ export default function CreateOmero() {
                     )
                   })}
                 </View>
-              </SurfaceCard>
+                </SurfaceCard>
+              </Animated.View>
             ))}
           </View>
 
+          <Animated.View
+            entering={FadeInDown.delay(BUILDER_GROUPS.length * 55).duration(340).reduceMotion(ReduceMotion.System)}
+          >
           <SurfaceCard radius={24} padding={18} style={{ marginTop: 14 }}>
             <Text style={{ fontFamily: FONTS.display, fontSize: 21, color: COLORS.ink }}>
               Il tuo panino 🍔
@@ -166,6 +178,7 @@ export default function CreateOmero() {
               </Text>
             </AnimatedPressable>
           </SurfaceCard>
+          </Animated.View>
         </View>
       </ScrollView>
     </View>
