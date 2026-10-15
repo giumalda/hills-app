@@ -42,23 +42,34 @@ jobs:
             echo "::error::Non è stato trovato il workspace iOS generato da Expo."
             exit 1
           fi
-          SCHEME="$(xcodebuild -workspace "$WORKSPACE" -list -json | node -e '
+          PROJECT_PATH="$(find ios -maxdepth 1 -name '*.xcodeproj' -print -quit)"
+          if [ -z "$PROJECT_PATH" ]; then
+            echo "::error::Non è stato trovato il progetto Xcode dell'app."
+            exit 1
+          fi
+          SCHEME="$(basename "$PROJECT_PATH" .xcodeproj)"
+          EXPECTED_SCHEME="$SCHEME" xcodebuild -workspace "$WORKSPACE" -list -json | node -e '
             let input = "";
             process.stdin.on("data", chunk => input += chunk);
             process.stdin.on("end", () => {
               const data = JSON.parse(input);
               const schemes = data.workspace?.schemes ?? data.project?.schemes ?? [];
-              if (!schemes.length) process.exit(1);
-              console.log(schemes[0]);
+              const expected = process.env.EXPECTED_SCHEME;
+              if (!schemes.includes(expected)) {
+                console.error(`Schema app "${expected}" non trovato. Schemi disponibili: ${schemes.join(", ")}`);
+                process.exit(1);
+              }
+              console.log(expected);
             });
-          ')"
+          '
           if [ -z "$SCHEME" ]; then
-            echo "::error::Non è stato trovato uno schema Xcode."
+            echo "::error::Non è stato possibile selezionare lo schema Xcode dell'app."
             exit 1
           fi
 
           xcodebuild -workspace "$WORKSPACE" \
                      -scheme "$SCHEME" \
+                     -destination 'generic/platform=iOS' \
                      -configuration Release \
                      -sdk iphoneos \
                      CODE_SIGNING_ALLOWED=NO \
@@ -68,9 +79,11 @@ jobs:
 
       - name: Crea il pacchetto IPA non firmato
         run: |
-          APP_PATH="$(find build_output/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' -print -quit)"
+          PRODUCT_DIR="build_output/Build/Products/Release-iphoneos"
+          APP_PATH="$(find "$PRODUCT_DIR" -maxdepth 1 -type d -name '*.app' -print -quit)"
           if [ -z "$APP_PATH" ]; then
-            echo "::error::La build iOS non ha prodotto un'app .app."
+            echo "::error::Lo schema app iOS non ha prodotto un file .app in $PRODUCT_DIR."
+            find build_output/Build/Products -maxdepth 3 -type d -print || true
             exit 1
           fi
           mkdir -p ipa/Payload
