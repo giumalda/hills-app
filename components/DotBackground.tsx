@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { Platform, View, StyleSheet } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import { COLORS } from "@/constants/theme"
 
@@ -14,12 +14,12 @@ export function DotBackground() {
       <View
         style={[
           StyleSheet.absoluteFill,
-          {
+          Platform.OS === "web" ? {
             opacity: 0.18,
             backgroundImage:
               "radial-gradient(rgba(26, 20, 15, 0.38) 1.2px, transparent 1.2px)",
             backgroundSize: "24px 24px",
-          },
+          } : null,
         ]}
       />
     </View>

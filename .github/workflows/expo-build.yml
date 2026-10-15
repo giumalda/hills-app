@@ -92,6 +92,7 @@ jobs:
           zip -qry ../Hills-Burger-unsigned.ipa Payload
           unzip -t ../Hills-Burger-unsigned.ipa
           unzip -Z1 ../Hills-Burger-unsigned.ipa | grep -Eq '^Payload/[^/]+\.app/Info\.plist$'
+          unzip -Z1 ../Hills-Burger-unsigned.ipa | grep -Eq '^Payload/[^/]+\.app/main\.jsbundle$'
           echo "## IPA iOS non firmato" >> "$GITHUB_STEP_SUMMARY"
           echo "Il file IPA è validato ma non firmato; trascinalo in Sideloadly e firmalo con il tuo Apple ID prima dell'installazione. Per distribuirlo senza sideloading servono certificato Apple Developer e provisioning profile." >> "$GITHUB_STEP_SUMMARY"
 
@@ -142,6 +143,10 @@ jobs:
           APK_PATH="app/build/outputs/apk/release/app-release.apk"
           if [ ! -f "$APK_PATH" ]; then
             echo "::error::Gradle non ha prodotto l'APK release atteso: $APK_PATH"
+            exit 1
+          fi
+          if ! unzip -Z1 "$APK_PATH" | grep -qx 'assets/index.android.bundle'; then
+            echo "::error::L'APK non contiene il bundle JavaScript Android."
             exit 1
           fi
           cp "$APK_PATH" ../Hills-Burger.apk
