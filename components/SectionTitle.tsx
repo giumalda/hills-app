@@ -1,5 +1,6 @@
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import { COLORS, FONTS } from "@/constants/theme"
+import { AppText as Text } from "@/components/AppText"
 
 export function SectionTitle({ children, accent = COLORS.red }: { children: string; accent?: string }) {
   return (

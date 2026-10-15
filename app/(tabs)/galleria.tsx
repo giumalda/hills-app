@@ -1,7 +1,8 @@
-import { ScrollView, View, Text, Image, useWindowDimensions, type ImageSourcePropType } from "react-native"
+import { ScrollView, View, Image, useWindowDimensions, type ImageSourcePropType } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { PopCard } from "@/components/PopCard"
 import { DotBackground } from "@/components/DotBackground"
+import { AppText as Text } from "@/components/AppText"
 import { COLORS } from "@/constants/theme"
 
 const IMAGES: { src: ImageSourcePropType; title: string; tag: string; bg: string; credit?: string }[] = [

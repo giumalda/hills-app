@@ -1,4 +1,4 @@
-import { Platform, View, StyleSheet } from "react-native"
+import { Image, Platform, View, StyleSheet } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import { COLORS } from "@/constants/theme"
 
@@ -22,6 +22,15 @@ export function DotBackground() {
           } : null,
         ]}
       />
+      {Platform.OS !== "web" ? (
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          <Image
+            source={require("../assets/images/dot-pattern.png")}
+            resizeMode="repeat"
+            style={[StyleSheet.absoluteFill, { opacity: 0.18 }]}
+          />
+        </View>
+      ) : null}
     </View>
   )
 }

@@ -21,7 +21,7 @@ export function LiquidGlass({
         styles.container,
         glassShadow,
         {
-          backgroundColor: Platform.OS === "android" ? "rgba(255,255,255,0.92)" : tintColor,
+          backgroundColor: tintColor,
           borderColor: "rgba(255,255,255,0.78)",
         },
         Platform.OS === "web" ? styles.webGlass : null,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     WebkitBackdropFilter: "blur(24px) saturate(180%)",
   },
   tint: {
-    opacity: Platform.OS === "android" ? 1 : 0.48,
+    opacity: 0.48,
   },
   highlight: {
     position: "absolute",

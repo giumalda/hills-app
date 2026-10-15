@@ -1,7 +1,8 @@
 import type { ReactNode } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import Animated, { FadeInDown, FadeOutUp, ReduceMotion } from "react-native-reanimated"
 import { SurfaceCard } from "@/components/SurfaceCard"
+import { AppText as Text } from "@/components/AppText"
 import { COLORS, FONTS } from "@/constants/theme"
 import type { BuilderGroup, BuilderOption } from "@/data/burgerBuilder"
 

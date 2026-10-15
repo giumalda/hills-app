@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { View, Text } from "react-native"
+import { View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useOrder } from "@/components/order/OrderProvider"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
+import { AppText as Text } from "@/components/AppText"
 import { COLORS, FONTS } from "@/constants/theme"
 
 export type MenuCardItem = {

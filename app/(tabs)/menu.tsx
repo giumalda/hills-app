@@ -1,11 +1,12 @@
 import { useRef, useState } from "react"
-import { ScrollView, View, Text } from "react-native"
+import { ScrollView, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { MenuCard, type MenuCardItem } from "@/components/MenuCard"
+import { AppText as Text } from "@/components/AppText"
 import { COLORS, FONTS } from "@/constants/theme"
 import {
   allergeni,

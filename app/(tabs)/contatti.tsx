@@ -1,8 +1,9 @@
-import { Platform, ScrollView, View, Text, Linking, useWindowDimensions } from "react-native"
+import { Platform, ScrollView, View, Linking, useWindowDimensions } from "react-native"
 import { WebView } from "react-native-webview"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { Ionicons } from "@expo/vector-icons"
+import { AppText as Text } from "@/components/AppText"
 import { PopCard } from "@/components/PopCard"
 import { DotBackground } from "@/components/DotBackground"
 import { SectionTitle } from "@/components/SectionTitle"
@@ -13,6 +14,14 @@ import { VENUE, HOURS, SERVICES, SOCIAL_LINKS } from "@/data/info"
 const TODAY = new Date().getDay() // 0=Sun
 // Map JS day index to HOURS array (HOURS[0] = Monday)
 const todayIdx = TODAY === 0 ? 6 : TODAY - 1
+const MAP_IFRAME_HTML = `<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <style>html,body,iframe{width:100%;height:100%;margin:0;padding:0;border:0;overflow:hidden}</style>
+  </head>
+  <body><iframe title="Mappa di Hill's Burger a Mottola" src="${VENUE.mapEmbed}" loading="eager" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></body>
+</html>`
 
 export default function Contatti() {
   const insets = useSafeAreaInsets()
@@ -72,10 +81,12 @@ export default function Contatti() {
             />
           ) : (
             <WebView
-              source={{ uri: VENUE.mapEmbed }}
+              source={{ html: MAP_IFRAME_HTML, baseUrl: "https://www.google.com" }}
               accessibilityLabel="Mappa di Hill's Burger a Mottola"
               javaScriptEnabled
               domStorageEnabled
+              scrollEnabled={false}
+              setSupportMultipleWindows={false}
               style={{ flex: 1 }}
             />
           )}

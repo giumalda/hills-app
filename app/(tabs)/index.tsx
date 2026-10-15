@@ -1,8 +1,9 @@
 import { useEffect } from "react"
-import { ScrollView, View, Text, Image, useWindowDimensions } from "react-native"
+import { ScrollView, View, Image, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Link } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
+import { AppText as Text } from "@/components/AppText"
 import Animated, {
   cancelAnimation,
   FadeInDown,

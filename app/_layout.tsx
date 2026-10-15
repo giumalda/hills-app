@@ -5,7 +5,8 @@ import { useFonts } from "expo-font"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useEffect } from "react"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
+import { AppText as Text } from "@/components/AppText"
 import { COLORS, FONTS } from "@/constants/theme"
 
 export default function RootLayout() {

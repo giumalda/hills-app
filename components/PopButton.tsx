@@ -1,7 +1,8 @@
-import { Text, View, type PressableProps } from "react-native"
+import { View, type PressableProps } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { hardShadow, COLORS } from "@/constants/theme"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
+import { AppText as Text } from "@/components/AppText"
 
 type Props = PressableProps & {
   label: string

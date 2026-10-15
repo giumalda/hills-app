@@ -1,7 +1,6 @@
 import { useState } from "react"
 import {
   View,
-  Text,
   TextInput,
   ScrollView,
   Linking,
@@ -14,6 +13,7 @@ import { useOrder } from "./OrderProvider"
 import { COLORS, FONTS } from "@/constants/theme"
 import { LiquidGlass } from "@/components/LiquidGlass"
 import { AnimatedPressable as Pressable } from "@/components/AnimatedPressable"
+import { AppText as Text } from "@/components/AppText"
 
 export function OrderPad() {
   const { lines, add, remove, clear, total, count, open, setOpen } = useOrder()
