@@ -93,6 +93,7 @@ jobs:
   build-android:
     if: ${{ inputs.platform == 'both' || inputs.platform == 'android' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Recupera il codice
         uses: actions/checkout@v4
@@ -114,13 +115,17 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
-          cache: gradle
+
+      - name: Configura cache Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
 
       - name: Compila l'APK di Android
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease
+          ./gradlew --build-cache --parallel --no-daemon --console=plain assembleRelease
           APK_PATH="app/build/outputs/apk/release/app-release.apk"
           if [ ! -f "$APK_PATH" ]; then
             echo "::error::Gradle non ha prodotto l'APK release atteso: $APK_PATH"
