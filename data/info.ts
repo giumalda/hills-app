@@ -12,7 +12,15 @@ export const VENUE = {
   whatsapp: "https://wa.me/393332968401",
   address: "Piazza Trieste, 35, 74017 Mottola (TA)",
   maps: "https://maps.google.com/?q=Hill's+Burger+Piazza+Trieste+35+Mottola",
+  mapEmbed:
+    "https://www.google.com/maps?q=Hill%27s+Burger+%26+Chips%2C+Piazza+Trieste%2C+35%2C+Mottola+TA&output=embed",
 }
+
+export const SOCIAL_LINKS = [
+  { title: "Instagram", url: "https://www.instagram.com/hill_s_burger/", icon: "logo-instagram" as const, color: "#D9468F" },
+  { title: "Facebook", url: "https://www.facebook.com/HILLSBURGER/?ref=PROFILE_EDIT_xav_ig_profile_page_web#", icon: "logo-facebook" as const, color: "#1877F2" },
+  { title: "TikTok", url: "https://www.tiktok.com/@hillsburger", icon: "logo-tiktok" as const, color: "#111111" },
+]
 
 export const FEATURES = [
   { emoji: "👨‍👩‍👧", title: "Gestione Familiare", desc: "Antonio e Pina in cucina, ogni giorno." },

@@ -99,11 +99,17 @@ const FEATURED_CHALLENGE = burgers.find((item) => item.isChallenge)
 export default function Menu() {
   const insets = useSafeAreaInsets()
   const scrollRef = useRef<ScrollView>(null)
+  const categoryScrollRef = useRef<ScrollView>(null)
   const sectionOffsets = useRef<Record<string, number>>({})
+  const categoryOffsets = useRef<Record<string, number>>({})
   const [activeId, setActiveId] = useState(MENU_GROUPS[0].id)
 
   const scrollToGroup = (group: MenuGroup) => {
     setActiveId(group.id)
+    categoryScrollRef.current?.scrollTo({
+      x: Math.max(0, (categoryOffsets.current[group.id] ?? 0) - 24),
+      animated: true,
+    })
     scrollRef.current?.scrollTo({
       y: sectionOffsets.current[group.id] ?? 0,
       animated: true,
@@ -114,7 +120,13 @@ export default function Menu() {
     const current = MENU_GROUPS.filter(
       (group) => sectionOffsets.current[group.id] <= offsetY + 100,
     ).at(-1)
-    if (current) setActiveId(current.id)
+    if (current && current.id !== activeId) {
+      setActiveId(current.id)
+      categoryScrollRef.current?.scrollTo({
+        x: Math.max(0, (categoryOffsets.current[current.id] ?? 0) - 24),
+        animated: true,
+      })
+    }
   }
 
   return (
@@ -134,6 +146,7 @@ export default function Menu() {
         </View>
 
         <ScrollView
+          ref={categoryScrollRef}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 20, gap: 8 }}
@@ -143,6 +156,9 @@ export default function Menu() {
             return (
               <AnimatedPressable
                 key={group.id}
+                onLayout={(event) => {
+                  categoryOffsets.current[group.id] = event.nativeEvent.layout.x
+                }}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
                 onPress={() => scrollToGroup(group)}
@@ -191,6 +207,8 @@ export default function Menu() {
         ref={scrollRef}
         contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 160, alignItems: "center" }}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={100}
+        onScroll={(event) => updateActiveGroup(event.nativeEvent.contentOffset.y)}
         onMomentumScrollEnd={(event) => updateActiveGroup(event.nativeEvent.contentOffset.y)}
         onScrollEndDrag={(event) => updateActiveGroup(event.nativeEvent.contentOffset.y)}
       >

@@ -260,26 +260,7 @@ export function OrderPad() {
                     Invia su WhatsApp
                   </Text>
                 </Pressable>
-              ) : (
-                <Pressable
-                  onPress={handleWhatsAppOrder}
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 6,
-                    backgroundColor: COLORS.ink,
-                    borderRadius: 999,
-                    paddingVertical: 12,
-                  }}
-                >
-                  <Ionicons name="logo-whatsapp" size={16} color={COLORS.sun} />
-                  <Text style={{ fontFamily: FONTS.display, fontSize: 12, color: COLORS.sun, textTransform: "uppercase" }}>
-                  Ordina su WhatsApp
-                  </Text>
-                </Pressable>
-              )}
+              ) : null}
               <Pressable
                 onPress={() => {
                   clear()

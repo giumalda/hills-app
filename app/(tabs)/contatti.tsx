@@ -1,4 +1,5 @@
-import { ScrollView, View, Text, Linking, useWindowDimensions } from "react-native"
+import { Platform, ScrollView, View, Text, Linking, useWindowDimensions } from "react-native"
+import { WebView } from "react-native-webview"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { PopCard } from "@/components/PopCard"
@@ -6,7 +7,7 @@ import { DotBackground } from "@/components/DotBackground"
 import { SectionTitle } from "@/components/SectionTitle"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { COLORS } from "@/constants/theme"
-import { VENUE, HOURS, SERVICES } from "@/data/info"
+import { VENUE, HOURS, SERVICES, SOCIAL_LINKS } from "@/data/info"
 
 const TODAY = new Date().getDay() // 0=Sun
 // Map JS day index to HOURS array (HOURS[0] = Monday)
@@ -40,17 +41,9 @@ export default function Contatti() {
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>WHATSAPP</Text>
             </PopCard>
           </AnimatedPressable>
-          <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.maps)}>
-            <PopCard bg={COLORS.yellow} style={{ padding: 16, alignItems: "center" }}>
-              <Ionicons name="navigate" size={26} color={COLORS.ink} />
-              <Text style={{ color: COLORS.ink, fontWeight: "900", marginTop: 6, fontSize: 13 }}>MAPPA</Text>
-            </PopCard>
-          </AnimatedPressable>
         </View>
 
-        {/* Address */}
-        <AnimatedPressable onPress={() => Linking.openURL(VENUE.maps)}>
-          <PopCard bg={COLORS.cream} style={{ padding: 16, flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 24 }}>
+        <PopCard bg={COLORS.cream} style={{ padding: 16, flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 12 }}>
             <View style={{ backgroundColor: COLORS.pink, borderWidth: 2, borderColor: COLORS.ink, borderRadius: 10, width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <Ionicons name="location" size={22} color={COLORS.ink} />
             </View>
@@ -58,9 +51,44 @@ export default function Contatti() {
               <Text style={{ fontSize: 12, fontWeight: "700", color: "rgba(17,17,17,0.6)" }}>Dove siamo</Text>
               <Text style={{ fontSize: 15, fontWeight: "900", color: COLORS.ink }}>{VENUE.address}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={COLORS.ink} />
-          </PopCard>
-        </AnimatedPressable>
+        </PopCard>
+
+        <View style={{ height: 240, overflow: "hidden", borderRadius: 22, borderWidth: 2, borderColor: COLORS.ink, marginBottom: 24 }}>
+          {Platform.OS === "web" ? (
+            <iframe
+              title="Mappa di Hill's Burger a Mottola"
+              src={VENUE.mapEmbed}
+              loading="lazy"
+              style={{ border: 0, width: "100%", height: "100%" }}
+            />
+          ) : (
+            <WebView
+              source={{ uri: VENUE.mapEmbed }}
+              accessibilityLabel="Mappa di Hill's Burger a Mottola"
+              javaScriptEnabled
+              domStorageEnabled
+              style={{ flex: 1 }}
+            />
+          )}
+        </View>
+
+        <SectionTitle accent={COLORS.pink}>SEGUICI</SectionTitle>
+        <View style={{ flexDirection: "row", gap: 10, marginBottom: 24 }}>
+          {SOCIAL_LINKS.map((social) => (
+            <AnimatedPressable
+              key={social.title}
+              accessibilityRole="link"
+              accessibilityLabel={social.title}
+              onPress={() => Linking.openURL(social.url)}
+              style={{ flex: 1 }}
+            >
+              <PopCard bg={COLORS.white} style={{ padding: 13, alignItems: "center" }}>
+                <Ionicons name={social.icon} size={25} color={social.color} />
+                <Text style={{ fontSize: 10, fontWeight: "900", color: COLORS.ink, marginTop: 5 }}>{social.title}</Text>
+              </PopCard>
+            </AnimatedPressable>
+          ))}
+        </View>
 
         {/* Hours */}
         <SectionTitle accent={COLORS.orange}>ORARI</SectionTitle>

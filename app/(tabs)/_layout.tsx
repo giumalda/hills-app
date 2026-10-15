@@ -20,23 +20,23 @@ export default function TabsLayout() {
             tabBarInactiveTintColor: "rgba(26,20,15,0.62)",
             tabBarShowLabel: true,
             tabBarLabelStyle: { fontSize: 10, fontFamily: FONTS.sansBold, marginTop: 2 },
-            tabBarItemStyle: { borderRadius: 22, marginHorizontal: 1 },
+            tabBarItemStyle: { borderRadius: 999, marginHorizontal: 1, paddingHorizontal: 1 },
             tabBarBackground: () => (
               <LiquidGlass
                 pointerEvents="none"
                 intensity={76}
                 tintColor="rgba(255,255,255,0.42)"
-                style={[StyleSheet.absoluteFillObject, { borderRadius: 30 }]}
+                style={[StyleSheet.absoluteFillObject, { borderRadius: 999 }]}
               />
             ),
             tabBarStyle: {
               position: "absolute",
-              left: 12,
-              right: 12,
+              left: 10,
+              right: 10,
               bottom: Platform.OS === "web" ? 8 : Math.max(insets.bottom, 8),
-              height: 72,
-              paddingTop: 7,
-              paddingBottom: 7,
+              height: 78,
+              paddingTop: 5,
+              paddingBottom: 5,
               backgroundColor: "transparent",
               borderTopWidth: 0,
               borderTopColor: "transparent",
@@ -84,6 +84,7 @@ export default function TabsLayout() {
             name="galleria"
             options={{
               title: "Galleria",
+              tabBarButton: () => null,
               tabBarIcon: ({ color, size, focused }) => (
                 <View style={focused ? styles.activeIcon : undefined}>
                   <Ionicons name="images" size={size} color={color} />
@@ -122,8 +123,8 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   activeIcon: {
-    minWidth: 44,
-    height: 30,
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 999,

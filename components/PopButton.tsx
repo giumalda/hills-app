@@ -22,7 +22,6 @@ export function PopButton({ label, bg = COLORS.red, color = "#FFFFFF", icon, sty
           borderRadius: 999,
           paddingVertical: 14,
           paddingHorizontal: 22,
-          transform: [{ translateX: pressed ? 4 : 0 }, { translateY: pressed ? 4 : 0 }],
           ...(pressed ? { shadowOpacity: 0, elevation: 0 } : hardShadow),
         },
         typeof style === "function" ? undefined : style,
