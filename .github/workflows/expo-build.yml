@@ -1,10 +1,9 @@
-name: Compila iOS e Android
+name: Build Hill's Burger
 on:
-  # Non parte a ogni push: avvialo a mano da Actions → "Compila iOS e Android" → Run workflow
   workflow_dispatch:
     inputs:
       platform:
-        description: "Cosa compilare"
+        description: "Piattaforme da compilare"
         required: true
         default: "both"
         type: choice
@@ -12,6 +11,9 @@ on:
           - both
           - ios
           - android
+
+permissions:
+  contents: read
 
 jobs:
   build-ios:
@@ -25,40 +27,66 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Installa le dipendenze
-        run: npm install
+        run: npm ci
 
       - name: Genera la cartella iOS nativa
-        run: npx expo prebuild --platform ios
+        run: npx expo prebuild --platform ios --no-install
 
-      - name: Compila il codice rilevando lo schema esatto
+      - name: Compila l'app iOS
         run: |
-          WORKSPACE=$(ls ios | grep .xcworkspace)
-          SCHEME=$(xcodebuild -workspace ios/$WORKSPACE -list | grep "Schemes:" -A 1 | tail -n 1 | xargs)
-          
-          echo "Workspace trovato: $WORKSPACE"
-          echo "Scheme rilevato: $SCHEME"
-          
-          xcodebuild -workspace ios/$WORKSPACE \
+          WORKSPACE="$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)"
+          if [ -z "$WORKSPACE" ]; then
+            echo "::error::Non è stato trovato il workspace iOS generato da Expo."
+            exit 1
+          fi
+          SCHEME="$(xcodebuild -workspace "$WORKSPACE" -list -json | node -e '
+            let input = "";
+            process.stdin.on("data", chunk => input += chunk);
+            process.stdin.on("end", () => {
+              const data = JSON.parse(input);
+              const schemes = data.workspace?.schemes ?? data.project?.schemes ?? [];
+              if (!schemes.length) process.exit(1);
+              console.log(schemes[0]);
+            });
+          ')"
+          if [ -z "$SCHEME" ]; then
+            echo "::error::Non è stato trovato uno schema Xcode."
+            exit 1
+          fi
+
+          xcodebuild -workspace "$WORKSPACE" \
                      -scheme "$SCHEME" \
                      -configuration Release \
                      -sdk iphoneos \
                      CODE_SIGNING_ALLOWED=NO \
                      CODE_SIGNING_REQUIRED=NO \
-                     -derivedDataPath build_output
+                     -derivedDataPath build_output \
+                     build
 
-      - name: Pacchettizza l'app nel file .ipa reale (Trucco del Payload)
+      - name: Crea il pacchetto IPA non firmato
         run: |
-          mkdir Payload
-          find build_output -name "*.app" -exec cp -r {} Payload/ \;
-          zip -r hillsburger.ipa Payload
+          APP_PATH="$(find build_output/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' -print -quit)"
+          if [ -z "$APP_PATH" ]; then
+            echo "::error::La build iOS non ha prodotto un'app .app."
+            exit 1
+          fi
+          mkdir -p ipa/Payload
+          cp -R "$APP_PATH" ipa/Payload/
+          cd ipa
+          zip -qry ../Hills-Burger-unsigned.ipa Payload
+          echo "## IPA iOS non firmato" >> "$GITHUB_STEP_SUMMARY"
+          echo "Il file è scaricabile ma non installabile direttamente su iPhone: per installarlo serve una firma Apple Developer e un provisioning profile." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Rendi l'IPA scaricabile su GitHub
         uses: actions/upload-artifact@v4
         with:
-          name: HillsBurger-Vero-IPA
-          path: hillsburger.ipa
+          name: Hills-Burger-iOS-unsigned-IPA
+          path: Hills-Burger-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 14
 
   build-android:
     if: ${{ inputs.platform == 'both' || inputs.platform == 'android' }}
@@ -71,27 +99,37 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: Installa le dipendenze
+        run: npm ci
+
+      - name: Genera la cartella Android nativa
+        run: npx expo prebuild --platform android --no-install
 
       - name: Installa Java per Android
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Installa le dipendenze
-        run: npm install
-
-      - name: Genera la cartella Android nativa
-        run: npx expo prebuild --platform android
+          cache: gradle
 
       - name: Compila l'APK di Android
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleRelease
+          APK_PATH="app/build/outputs/apk/release/app-release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            echo "::error::Gradle non ha prodotto l'APK release atteso: $APK_PATH"
+            exit 1
+          fi
+          cp "$APK_PATH" ../Hills-Burger.apk
 
       - name: Rendi l'APK scaricabile su GitHub
         uses: actions/upload-artifact@v4
         with:
-          name: HillsBurger-Android-APK
-          path: android/app/build
+          name: Hills-Burger-Android-APK
+          path: Hills-Burger.apk
+          if-no-files-found: error
+          retention-days: 14

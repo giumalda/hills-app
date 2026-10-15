@@ -4,28 +4,43 @@
     "slug": "hills-burger",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/images/app-icon-light.png",
     "scheme": "hillsburger",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
+      "image": "./assets/images/app-icon-foreground.png",
+      "imageWidth": 260,
       "backgroundColor": "#FFD90F",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
+      "icon": {
+        "light": "./assets/images/app-icon-light.png",
+        "dark": "./assets/images/app-icon-dark.png",
+        "tinted": "./assets/images/app-icon-monochrome.png"
+      },
       "bundleIdentifier": "com.giumalda.hillsburger"
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/images/app-icon-foreground.png",
+        "monochromeImage": "./assets/images/app-icon-monochrome.png",
         "backgroundColor": "#FFD90F"
-      }
+      },
+      "package": "com.giumalda.hillsburger"
     },
     "web": {
       "bundler": "metro",
       "output": "single"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true

@@ -1,11 +1,13 @@
-# hills-app
+# Hill's Burger
 
-This is a [Next.js](https://nextjs.org) project.
+Expo / React Native app for Hill's Burger.
 
-## Learn More
+## Download Android and iOS builds
 
-To learn more, take a look at the following resources:
+1. Open the repository's **Actions** tab and run **Build Hill's Burger**.
+2. Choose Android, iOS, or both.
+3. Download the generated file from the workflow run's **Artifacts** section.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+The Android artifact is `Hills-Burger.apk`. The iOS artifact is an unsigned `Hills-Burger-unsigned.ipa`: it can be downloaded, but installing it on a physical iPhone requires an Apple Developer signing certificate and a matching provisioning profile.
+
+The app icons are generated from the burger artwork in `assets/images` and configured in `app.json`, including light/dark iOS icons and Android adaptive/themed icons.
