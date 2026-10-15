@@ -90,6 +90,7 @@ export function OrderPad() {
 
       <Modal visible={open} animationType="slide" transparent onRequestClose={() => setOpen(false)}>
         <Pressable
+          glass={false}
           style={{ flex: 1, backgroundColor: "rgba(26,20,15,0.2)" }}
           onPress={() => setOpen(false)}
         />

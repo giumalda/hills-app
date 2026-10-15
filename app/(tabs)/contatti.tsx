@@ -30,13 +30,13 @@ export default function Contatti() {
         {/* Quick actions */}
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
           <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.phoneHref)}>
-            <PopCard bg={COLORS.red} style={{ padding: 16, alignItems: "center" }}>
+            <PopCard glass tintColor="rgba(230,57,43,0.88)" style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="call" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>CHIAMA</Text>
             </PopCard>
           </AnimatedPressable>
           <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.whatsapp)}>
-            <PopCard bg={COLORS.green} style={{ padding: 16, alignItems: "center" }}>
+            <PopCard glass tintColor="rgba(37,211,102,0.82)" style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="logo-whatsapp" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>WHATSAPP</Text>
             </PopCard>
@@ -82,7 +82,7 @@ export default function Contatti() {
               onPress={() => Linking.openURL(social.url)}
               style={{ flex: 1 }}
             >
-              <PopCard bg={COLORS.white} style={{ padding: 13, alignItems: "center" }}>
+              <PopCard glass style={{ padding: 13, alignItems: "center" }}>
                 <Ionicons name={social.icon} size={25} color={social.color} />
                 <Text style={{ fontSize: 10, fontWeight: "900", color: COLORS.ink, marginTop: 5 }}>{social.title}</Text>
               </PopCard>

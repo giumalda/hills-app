@@ -1,28 +1,47 @@
 import { View, type ViewProps } from "react-native"
 import { glassShadow } from "@/constants/theme"
+import { LiquidGlass } from "@/components/LiquidGlass"
 
 type Props = ViewProps & {
   radius?: number
   padding?: number
+  glass?: boolean
+  tintColor?: string
 }
 
-export function SurfaceCard({ style, children, radius = 22, padding = 18, ...rest }: Props) {
-  return (
-    <View
-      {...rest}
-      style={[
-        {
-          borderRadius: radius,
-          borderWidth: 1,
-          borderColor: "rgba(26,20,15,0.08)",
-          backgroundColor: "#FFFEFA",
-          padding,
-          ...glassShadow,
-        },
-        style,
-      ]}
-    >
-      {children}
-    </View>
-  )
+export function SurfaceCard({
+  style,
+  children,
+  radius = 22,
+  padding = 18,
+  glass = false,
+  tintColor,
+  ...rest
+}: Props) {
+  const cardStyle = [
+    {
+      borderRadius: radius,
+      borderWidth: 1,
+      borderColor: glass ? "rgba(255,255,255,0.72)" : "rgba(26,20,15,0.08)",
+      backgroundColor: glass ? "rgba(255,255,255,0.3)" : "#FFFEFA",
+      padding,
+      ...glassShadow,
+    },
+    style,
+  ]
+
+  if (glass) {
+    return (
+      <LiquidGlass
+        {...rest}
+        intensity={48}
+        tintColor={tintColor ?? "rgba(255,255,255,0.34)"}
+        style={cardStyle}
+      >
+        {children}
+      </LiquidGlass>
+    )
+  }
+
+  return <View {...rest} style={cardStyle}>{children}</View>
 }

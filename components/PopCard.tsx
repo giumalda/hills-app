@@ -1,26 +1,44 @@
 import { View, type ViewProps } from "react-native"
 import { glassShadow } from "@/constants/theme"
+import { LiquidGlass } from "@/components/LiquidGlass"
 
 type Props = ViewProps & {
   bg?: string
+  glass?: boolean
+  tintColor?: string
 }
 
-export function PopCard({ style, bg = "#FFFFFF", children, ...rest }: Props) {
-  return (
-    <View
-      style={[
-        {
-          backgroundColor: bg,
-          borderWidth: 1,
-          borderColor: "rgba(26,20,15,0.08)",
-          borderRadius: 22,
-          ...glassShadow,
-        },
-        style,
-      ]}
-      {...rest}
-    >
-      {children}
-    </View>
-  )
+export function PopCard({
+  style,
+  bg = "#FFFFFF",
+  children,
+  glass = false,
+  tintColor,
+  ...rest
+}: Props) {
+  const cardStyle = [
+    {
+      backgroundColor: glass ? "rgba(255,255,255,0.28)" : bg,
+      borderWidth: 1,
+      borderColor: glass ? "rgba(255,255,255,0.72)" : "rgba(26,20,15,0.08)",
+      borderRadius: 22,
+      ...glassShadow,
+    },
+    style,
+  ]
+
+  if (glass) {
+    return (
+      <LiquidGlass
+        {...rest}
+        intensity={48}
+        tintColor={tintColor ?? "rgba(255,255,255,0.34)"}
+        style={cardStyle}
+      >
+        {children}
+      </LiquidGlass>
+    )
+  }
+
+  return <View {...rest} style={cardStyle}>{children}</View>
 }

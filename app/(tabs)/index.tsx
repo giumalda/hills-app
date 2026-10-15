@@ -17,6 +17,7 @@ import Animated, {
 import { PopButton } from "@/components/PopButton"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
 import { DotBackground } from "@/components/DotBackground"
+import { LiquidGlass } from "@/components/LiquidGlass"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { COLORS, FONTS } from "@/constants/theme"
 import { FEATURES, HOURS } from "@/data/info"
@@ -95,11 +96,6 @@ export default function Home() {
                 </Text>
               </View>
             </View>
-            <View style={{ alignSelf: "stretch", backgroundColor: COLORS.ink, borderRadius: 6, paddingHorizontal: 10, paddingVertical: 6, marginTop: 15 }}>
-              <Text style={{ fontFamily: FONTS.display, fontSize: 10, letterSpacing: 1.1, color: COLORS.yellow, textAlign: "center" }}>
-                HAMBURGHERIA · FAST FOOD · PANINOTECA · MOTTOLA (TA)
-              </Text>
-            </View>
             <Text style={{ fontFamily: FONTS.display, fontSize: 29, lineHeight: 34, color: COLORS.ink, textAlign: "center", marginTop: 14 }}>
               QUI COMANDA
             </Text>
@@ -129,11 +125,11 @@ export default function Home() {
 
           <Link href="/coupon" asChild>
             <AnimatedPressable accessibilityRole="button" style={{ marginTop: 22 }}>
-              <View
+              <LiquidGlass
+                intensity={54}
+                tintColor="rgba(255,248,216,0.55)"
                 style={{
-                  backgroundColor: "#FFF8D8",
-                  borderWidth: 2,
-                  borderColor: COLORS.ink,
+                  backgroundColor: "rgba(255,248,216,0.42)",
                   borderRadius: 24,
                   padding: 18,
                   flexDirection: "row",
@@ -156,7 +152,7 @@ export default function Home() {
                   </Text>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.ink} />
-              </View>
+              </LiquidGlass>
             </AnimatedPressable>
           </Link>
 
@@ -171,7 +167,7 @@ export default function Home() {
                     accessibilityRole="button"
                     style={{ width: isWide ? (Math.min(width, 900) - 52) / 2 : (width - 52) / 2 }}
                   >
-                    <SurfaceCard padding={13} style={{ minHeight: 88, justifyContent: "center" }}>
+                    <SurfaceCard glass padding={13} style={{ minHeight: 88, justifyContent: "center" }}>
                       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                         <Ionicons name={link.icon} size={24} color={COLORS.red} />
                         <View style={{ flex: 1 }}>
@@ -214,7 +210,7 @@ export default function Home() {
 
           <Link href="/contatti" asChild>
             <AnimatedPressable accessibilityRole="button" style={{ marginTop: 18 }}>
-              <SurfaceCard padding={15}>
+              <SurfaceCard glass padding={15}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                   <View style={{ width: 42, height: 42, borderRadius: 999, backgroundColor: "rgba(230,57,43,0.1)", alignItems: "center", justifyContent: "center" }}>
                     <Ionicons name="time-outline" size={22} color={COLORS.red} />
