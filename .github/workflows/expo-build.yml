@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Genera la cartella iOS nativa
-        run: npx expo prebuild --platform ios --no-install
+        run: npx expo prebuild --platform ios
 
       - name: Compila l'app iOS
         run: |
