@@ -156,6 +156,7 @@ export default function Menu() {
             return (
               <AnimatedPressable
                 key={group.id}
+                glass={!selected}
                 onLayout={(event) => {
                   categoryOffsets.current[group.id] = event.nativeEvent.layout.x
                 }}
@@ -183,6 +184,7 @@ export default function Menu() {
           })}
         </ScrollView>
         <AnimatedPressable
+          glass
           accessibilityRole="button"
           accessibilityLabel="Vai alla tabella allergeni"
           onPress={() => scrollRef.current?.scrollToEnd({ animated: true })}

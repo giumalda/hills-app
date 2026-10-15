@@ -20,7 +20,7 @@ export function AnimatedPressable({
   onPressOut,
   style,
   children,
-  glass = true,
+  glass = false,
   ...props
 }: Props) {
   const [pressed, setPressed] = useState(false)

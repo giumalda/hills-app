@@ -14,6 +14,7 @@ export function PopButton({ label, bg = COLORS.red, color = "#FFFFFF", icon, sty
   return (
     <AnimatedPressable
       {...rest}
+      glass={false}
       style={({ pressed }) => [
         {
           backgroundColor: bg,

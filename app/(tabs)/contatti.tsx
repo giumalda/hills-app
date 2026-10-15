@@ -30,13 +30,13 @@ export default function Contatti() {
         {/* Quick actions */}
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
           <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.phoneHref)}>
-            <PopCard glass tintColor="rgba(230,57,43,0.88)" style={{ padding: 16, alignItems: "center" }}>
+            <PopCard bg={COLORS.red} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="call" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>CHIAMA</Text>
             </PopCard>
           </AnimatedPressable>
           <AnimatedPressable style={{ flex: 1 }} onPress={() => Linking.openURL(VENUE.whatsapp)}>
-            <PopCard glass tintColor="rgba(37,211,102,0.82)" style={{ padding: 16, alignItems: "center" }}>
+            <PopCard bg={COLORS.green} style={{ padding: 16, alignItems: "center" }}>
               <Ionicons name="logo-whatsapp" size={26} color={COLORS.white} />
               <Text style={{ color: COLORS.white, fontWeight: "900", marginTop: 6, fontSize: 13 }}>WHATSAPP</Text>
             </PopCard>

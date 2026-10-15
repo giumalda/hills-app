@@ -93,6 +93,7 @@ export default function CreateOmero() {
                     return (
                       <AnimatedPressable
                         key={option.id}
+                        glass={!selected}
                         accessibilityRole="button"
                         accessibilityState={{ selected }}
                         onPress={() => toggleOption(group.id, option.id, group.multiple)}

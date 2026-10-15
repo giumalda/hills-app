@@ -62,6 +62,7 @@ export function OrderPad() {
           }}
         >
           <Pressable
+            glass={false}
             accessibilityRole="button"
             accessibilityLabel={`Apri carrello, ${count} articoli, totale ${total.toFixed(2)} euro`}
             onPress={() => setOpen(true)}
