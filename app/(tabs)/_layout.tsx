@@ -19,6 +19,7 @@ export default function TabsLayout() {
             tabBarActiveTintColor: COLORS.ink,
             tabBarInactiveTintColor: "rgba(26,20,15,0.62)",
             tabBarShowLabel: true,
+            tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: { fontSize: 10, fontFamily: FONTS.sansBold, marginTop: 2 },
             tabBarItemStyle: { borderRadius: 999, marginHorizontal: 1, paddingHorizontal: 1 },
             tabBarBackground: () => (
@@ -52,7 +53,7 @@ export default function TabsLayout() {
             options={{
               title: "Home",
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="home" size={size} color={color} />
                 </View>
               ),
@@ -63,7 +64,7 @@ export default function TabsLayout() {
             options={{
               title: "Menù",
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="fast-food" size={size} color={color} />
                 </View>
               ),
@@ -74,7 +75,7 @@ export default function TabsLayout() {
             options={{
               title: "Crea",
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="construct" size={size} color={color} />
                 </View>
               ),
@@ -86,7 +87,7 @@ export default function TabsLayout() {
               title: "Galleria",
               tabBarButton: () => null,
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="images" size={size} color={color} />
                 </View>
               ),
@@ -97,7 +98,7 @@ export default function TabsLayout() {
             options={{
               title: "Coupon",
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="ticket" size={size} color={color} />
                 </View>
               ),
@@ -108,7 +109,7 @@ export default function TabsLayout() {
             options={{
               title: "Contatti",
               tabBarIcon: ({ color, size, focused }) => (
-                <View style={focused ? styles.activeIcon : undefined}>
+                <View style={[styles.iconContainer, focused && styles.activeIcon]}>
                   <Ionicons name="location" size={size} color={color} />
                 </View>
               ),
@@ -122,12 +123,15 @@ export default function TabsLayout() {
 }
 
 const styles = StyleSheet.create({
-  activeIcon: {
+  iconContainer: {
     width: 44,
     height: 44,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 999,
-    backgroundColor: "rgba(255,217,15,0.7)",
+    alignSelf: "center",
+    borderRadius: 22,
+  },
+  activeIcon: {
+    backgroundColor: COLORS.sun,
   },
 })

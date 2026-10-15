@@ -66,7 +66,7 @@ export default function Home() {
             entering={FadeInDown.duration(380).reduceMotion(ReduceMotion.System)}
             style={{
               alignItems: "center",
-              backgroundColor: "#D8F5FF",
+              backgroundColor: "#FFF3A6",
               borderRadius: 30,
               borderWidth: 2,
               borderColor: COLORS.ink,

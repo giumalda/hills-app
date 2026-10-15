@@ -6,7 +6,7 @@ export function DotBackground() {
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <LinearGradient
-        colors={["#BCEFFF", COLORS.sky, "#31B8E7"]}
+        colors={["#FFF3A6", COLORS.sun, "#F2C400"]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}
         style={StyleSheet.absoluteFill}
