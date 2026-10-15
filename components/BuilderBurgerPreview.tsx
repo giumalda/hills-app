@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { Text, View } from "react-native"
 import Animated, { FadeInDown, FadeOutUp, ReduceMotion } from "react-native-reanimated"
 import { SurfaceCard } from "@/components/SurfaceCard"
@@ -5,37 +6,6 @@ import { COLORS, FONTS } from "@/constants/theme"
 import type { BuilderGroup, BuilderOption } from "@/data/burgerBuilder"
 
 type Selections = Record<string, string[]>
-
-type IngredientVisual = {
-  symbol: string
-  color: string
-  accent: string
-  kind: "meat" | "cheese" | "extra" | "sauce"
-}
-
-const INGREDIENT_VISUALS: Record<string, IngredientVisual> = {
-  "bovino-100": { symbol: "🥩", color: "#8D3C25", accent: "#642718", kind: "meat" },
-  "scottona-200": { symbol: "🥩", color: "#A7442A", accent: "#672818", kind: "meat" },
-  "angus-200": { symbol: "🔥", color: "#713827", accent: "#46231B", kind: "meat" },
-  "pulled-pork": { symbol: "🐷", color: "#C87842", accent: "#99502E", kind: "meat" },
-  "burger-verdure": { symbol: "🌱", color: "#5D8A3A", accent: "#3C622D", kind: "meat" },
-  cheddar: { symbol: "🧀", color: "#F7B928", accent: "#E39416", kind: "cheese" },
-  provola: { symbol: "🧀", color: "#F4D78D", accent: "#D7B85F", kind: "cheese" },
-  bufala: { symbol: "🥛", color: "#FFF5D9", accent: "#E6D8B6", kind: "cheese" },
-  gorgonzola: { symbol: "🧀", color: "#D5C99C", accent: "#89936B", kind: "cheese" },
-  grana: { symbol: "✨", color: "#F1D890", accent: "#D2B75F", kind: "cheese" },
-  bacon: { symbol: "🥓", color: "#C54B35", accent: "#8E2D27", kind: "extra" },
-  uovo: { symbol: "🍳", color: "#F4C94B", accent: "#E99E32", kind: "extra" },
-  cipolla: { symbol: "🧅", color: "#B36A8C", accent: "#85496D", kind: "extra" },
-  "patatine-panino": { symbol: "🍟", color: "#E9A52A", accent: "#C8781D", kind: "extra" },
-  cavolo: { symbol: "🥬", color: "#7E9E4A", accent: "#587238", kind: "extra" },
-  melanzane: { symbol: "🍆", color: "#76518B", accent: "#4C3769", kind: "extra" },
-  hills: { symbol: "⭐", color: "#F5C84A", accent: "#D69B2A", kind: "sauce" },
-  bbq: { symbol: "🔥", color: "#9C412B", accent: "#6B2D24", kind: "sauce" },
-  maionese: { symbol: "🥚", color: "#FFF1C9", accent: "#E2D39E", kind: "sauce" },
-  nduja: { symbol: "🌶️", color: "#D84A35", accent: "#A92D2D", kind: "sauce" },
-  pistacchio: { symbol: "🌰", color: "#87A64C", accent: "#607A36", kind: "sauce" },
-}
 
 function Bread({ breadId, breadName, placeholder = false }: { breadId?: string; breadName?: string; placeholder?: boolean }) {
   const isPiadina = breadId === "piadina"
@@ -97,13 +67,183 @@ function Bread({ breadId, breadName, placeholder = false }: { breadId?: string; 
   )
 }
 
-function IngredientLayer({ groupId, option }: { groupId: string; option: BuilderOption }) {
-  const visual = INGREDIENT_VISUALS[option.id]
-  if (!visual) return null
+function BaconStrip({ offset = 0 }: { offset?: number }) {
+  return (
+    <View style={{ position: "absolute", top: offset, flexDirection: "row", alignItems: "center" }}>
+      {[0, 1, 2, 3, 4, 5].map((part) => (
+        <View
+          key={part}
+          style={{
+            width: 17,
+            height: 12,
+            marginLeft: part === 0 ? 0 : -4,
+            borderRadius: part % 2 === 0 ? 7 : 5,
+            backgroundColor: part % 2 === 0 ? "#B93D30" : "#D65C43",
+            borderWidth: 1,
+            borderColor: "#8D2C28",
+            transform: [{ rotate: part % 2 === 0 ? "-9deg" : "9deg" }],
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View style={{ width: 10, height: 2, borderRadius: 2, backgroundColor: "#F4C59A", transform: [{ rotate: "-12deg" }] }} />
+        </View>
+      ))}
+    </View>
+  )
+}
 
-  const isMeat = visual.kind === "meat"
-  const isCheese = visual.kind === "cheese"
-  const width = isMeat ? 198 : isCheese ? 218 : 208
+function IngredientArtwork({ id }: { id: string }): ReactNode {
+  switch (id) {
+    case "bacon":
+      return (
+        <View style={{ width: 94, height: 26, justifyContent: "center", alignItems: "center" }}>
+          <BaconStrip offset={-3} />
+          <BaconStrip offset={6} />
+        </View>
+      )
+    case "uovo":
+      return (
+        <View style={{ width: 48, height: 27, alignItems: "center", justifyContent: "center" }}>
+          <View style={{ position: "absolute", width: 43, height: 25, borderRadius: 15, backgroundColor: "#FFF9E8", borderWidth: 1, borderColor: "#EADCB5", transform: [{ rotate: "-8deg" }] }} />
+          <View style={{ width: 16, height: 16, borderRadius: 99, backgroundColor: "#F4B52F", borderWidth: 2, borderColor: "#E79A20" }} />
+        </View>
+      )
+    case "cipolla":
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: -5 }}>
+          {[0, 1, 2].map((ring) => (
+            <View key={ring} style={{ width: 24, height: 19, borderRadius: 99, borderWidth: 4, borderColor: ring === 1 ? "#9F5C85" : "#C27CA0", backgroundColor: "#FFF1E5", transform: [{ rotate: `${ring * 18 - 18}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "patatine-panino":
+      return (
+        <View style={{ width: 59, height: 27, flexDirection: "row", alignItems: "flex-end", justifyContent: "center", gap: 3 }}>
+          {["#F4C84D", "#ECA82E", "#FFD96B", "#E9A12B", "#F5C34A"].map((color, index) => (
+            <View key={index} style={{ width: 7, height: 17 + (index % 3) * 4, borderRadius: 4, backgroundColor: color, borderBottomWidth: 2, borderBottomColor: "#D18A24", transform: [{ rotate: `${index % 2 ? 8 : -8}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "cavolo":
+      return (
+        <View style={{ width: 72, height: 25, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+          {[-20, -10, 0, 10, 20].map((angle, index) => (
+            <View key={index} style={{ width: 22, height: 15, marginLeft: -6, borderRadius: 14, backgroundColor: index % 2 ? "#76A94D" : "#91B85E", borderBottomWidth: 2, borderBottomColor: "#507C38", transform: [{ rotate: `${angle}deg` }] }}>
+              <View style={{ position: "absolute", width: 12, height: 2, top: 6, left: 5, borderRadius: 2, backgroundColor: "#D7E49B", transform: [{ rotate: `${-angle}deg` }] }} />
+            </View>
+          ))}
+        </View>
+      )
+    case "melanzane":
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+          {[0, 1, 2].map((slice) => (
+            <View key={slice} style={{ width: 25, height: 19, borderRadius: 99, backgroundColor: "#654178", borderWidth: 2, borderColor: "#42284F", alignItems: "center", justifyContent: "center", transform: [{ rotate: `${slice * 12 - 12}deg` }] }}>
+              <View style={{ width: 14, height: 10, borderRadius: 99, backgroundColor: "#D9B5A0" }} />
+            </View>
+          ))}
+        </View>
+      )
+    case "bovino-100":
+    case "scottona-200":
+    case "angus-200":
+      return (
+        <View style={{ width: 162, height: 27, borderRadius: 15, backgroundColor: id === "angus-200" ? "#633426" : id === "scottona-200" ? "#A84A31" : "#91402D", borderWidth: 1, borderColor: "#692C23", borderBottomWidth: 4, borderBottomColor: "#55251F", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+          <View style={{ position: "absolute", width: 133, height: 2, top: 8, borderRadius: 2, backgroundColor: "#D17A51", transform: [{ rotate: "-2deg" }] }} />
+          <View style={{ position: "absolute", width: 116, height: 2, top: 18, borderRadius: 2, backgroundColor: "#622D25", transform: [{ rotate: "2deg" }] }} />
+          <View style={{ width: 6, height: 3, borderRadius: 99, backgroundColor: "#E6A36C" }} />
+        </View>
+      )
+    case "pulled-pork":
+      return (
+        <View style={{ width: 166, height: 27, borderRadius: 13, backgroundColor: "#C67C48", borderBottomWidth: 3, borderBottomColor: "#955333", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 3 }}>
+          {[0, 1, 2, 3, 4, 5, 6].map((strand) => (
+            <View key={strand} style={{ width: 17, height: 3 + strand % 2, borderRadius: 4, backgroundColor: strand % 2 ? "#E4A16A" : "#9E5A36", transform: [{ rotate: `${strand % 2 ? 13 : -13}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "burger-verdure":
+      return (
+        <View style={{ width: 158, height: 26, borderRadius: 15, backgroundColor: "#719448", borderBottomWidth: 4, borderBottomColor: "#496B36", borderWidth: 1, borderColor: "#52733C", alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 7 }}>
+          {[0, 1, 2, 3, 4].map((seed) => (
+            <View key={seed} style={{ width: 5, height: 3, borderRadius: 99, backgroundColor: "#D9D58A", transform: [{ rotate: `${seed * 25}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "cheddar":
+      return (
+        <View style={{ width: 210, height: 20, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+          <View style={{ width: 202, height: 14, backgroundColor: "#F4B72F", borderRadius: 5, transform: [{ rotate: "-2deg" }] }} />
+          {[0, 1, 2].map((drop) => (
+            <View key={drop} style={{ position: "absolute", left: 49 + drop * 55, bottom: -1 - (drop % 2) * 3, width: 8, height: 9, borderBottomLeftRadius: 99, borderBottomRightRadius: 99, backgroundColor: "#F4B72F" }} />
+          ))}
+        </View>
+      )
+    case "provola":
+      return (
+        <View style={{ width: 194, height: 19, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 13 }}>
+          {[0, 1, 2, 3].map((mark) => (
+            <View key={mark} style={{ width: 36, height: 13, borderRadius: 8, backgroundColor: "#F0D99D", borderBottomWidth: 2, borderBottomColor: "#D2B876", transform: [{ rotate: `${mark % 2 ? 8 : -8}deg` }] }}>
+              <View style={{ width: 12, height: 3, marginTop: 3, marginLeft: 10, borderRadius: 99, backgroundColor: "#C79E61" }} />
+            </View>
+          ))}
+        </View>
+      )
+    case "bufala":
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          {[0, 1, 2, 3].map((slice) => (
+            <View key={slice} style={{ width: 26, height: 17, borderRadius: 99, backgroundColor: "#FFF9E8", borderWidth: 2, borderColor: "#E5D9BC", transform: [{ rotate: `${slice * 10 - 14}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "gorgonzola":
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: -4 }}>
+          {["#D6CDA9", "#C9C397", "#E0D8B7", "#BFC28F"].map((color, piece) => (
+            <View key={piece} style={{ width: 30, height: 18, borderRadius: piece % 2 ? 11 : 7, backgroundColor: color, transform: [{ rotate: `${piece * 11 - 16}deg` }] }}>
+              <View style={{ position: "absolute", width: 5, height: 3, top: 5, left: 9, borderRadius: 99, backgroundColor: "#75906B" }} />
+            </View>
+          ))}
+        </View>
+      )
+    case "grana":
+      return (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          {[0, 1, 2, 3, 4].map((flake) => (
+            <View key={flake} style={{ width: 21, height: 9 + (flake % 2) * 5, borderRadius: 5, backgroundColor: flake % 2 ? "#E9CF83" : "#F6E2A9", transform: [{ rotate: `${flake * 17 - 30}deg` }] }} />
+          ))}
+        </View>
+      )
+    case "hills":
+    case "bbq":
+    case "maionese":
+    case "nduja":
+    case "pistacchio": {
+      const sauce = {
+        hills: { base: "#E9B83E", line: "#F7D875" },
+        bbq: { base: "#783820", line: "#B65A32" },
+        maionese: { base: "#F6E6B7", line: "#FFF8E5" },
+        nduja: { base: "#BC352C", line: "#EA6541" },
+        pistacchio: { base: "#799449", line: "#AFC26C" },
+      }[id]
+      return (
+        <View style={{ width: 130, height: 16, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+          {[0, 1, 2, 3, 4].map((dot) => (
+            <View key={dot} style={{ width: dot === 2 ? 30 : 23, height: dot % 2 ? 5 : 7, marginLeft: -5, borderRadius: 99, backgroundColor: dot % 2 ? sauce.line : sauce.base, transform: [{ rotate: `${dot % 2 ? 13 : -13}deg` }] }} />
+          ))}
+        </View>
+      )
+    }
+    default:
+      return null
+  }
+}
+
+function IngredientLayer({ option }: { option: BuilderOption }) {
+  const artwork = IngredientArtwork({ id: option.id })
+  if (!artwork) return null
 
   return (
     <Animated.View
@@ -111,34 +251,17 @@ function IngredientLayer({ groupId, option }: { groupId: string; option: Builder
       entering={FadeInDown.duration(300).reduceMotion(ReduceMotion.System)}
       exiting={FadeOutUp.duration(200).reduceMotion(ReduceMotion.System)}
       style={{
-        width,
-        minHeight: isMeat ? 31 : isCheese ? 23 : 25,
-        marginTop: -8,
-        borderRadius: isMeat ? 13 : isCheese ? 5 : visual.kind === "sauce" ? 999 : 8,
-        backgroundColor: visual.color,
-        borderBottomWidth: isMeat ? 5 : 2,
-        borderBottomColor: visual.accent,
-        borderWidth: isMeat ? 1 : 0,
-        borderColor: visual.accent,
         alignItems: "center",
         justifyContent: "center",
-        paddingHorizontal: 9,
-        transform: [{ rotate: isCheese ? "-1deg" : isMeat ? "0.5deg" : "0deg" }],
+        width: 220,
+        height: 34,
+        marginTop: -7,
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-        <Text style={{ fontSize: 13, lineHeight: 17 }}>{visual.symbol}</Text>
-        <Text
-          numberOfLines={1}
-          style={{
-            fontFamily: FONTS.display,
-            fontSize: groupId === "salse" ? 8 : 9,
-            color: isCheese || option.id === "maionese" || option.id === "grana" ? "#4B321B" : COLORS.white,
-          }}
-        >
-          {option.name.toUpperCase()}
-        </Text>
-      </View>
+      {artwork}
+      <Text numberOfLines={1} style={{ fontFamily: FONTS.display, fontSize: 7, lineHeight: 9, color: "rgba(26,20,15,0.66)", marginTop: 1 }}>
+        {option.name.toUpperCase()}
+      </Text>
     </Animated.View>
   )
 }
@@ -151,7 +274,7 @@ export function BuilderBurgerPreview({ groups, selections }: { groups: BuilderGr
       ? []
       : group.options
           .filter((option) => selections[group.id]?.includes(option.id))
-          .map((option) => ({ groupId: group.id, option })),
+          .map((option) => ({ option })),
   )
   const hasIngredients = selectedIngredients.length > 0
 
@@ -193,7 +316,7 @@ export function BuilderBurgerPreview({ groups, selections }: { groups: BuilderGr
           <View style={{ alignItems: "center" }}>
             <Bread breadId={selectedBread?.id} breadName={selectedBread?.name} placeholder={!selectedBread} />
             {[...selectedIngredients].reverse().map(({ groupId, option }) => (
-              <IngredientLayer key={option.id} groupId={groupId} option={option} />
+              <IngredientLayer key={option.id} option={option} />
             ))}
             {selectedIngredients.length === 0 ? (
               <View
