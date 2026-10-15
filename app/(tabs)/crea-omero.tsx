@@ -6,6 +6,7 @@ import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated"
 import { DotBackground } from "@/components/DotBackground"
 import { SurfaceCard } from "@/components/SurfaceCard"
 import { AnimatedPressable } from "@/components/AnimatedPressable"
+import { BuilderBurgerPreview } from "@/components/BuilderBurgerPreview"
 import { COLORS, FONTS } from "@/constants/theme"
 import { BUILDER_GROUPS, getBuilderLevel } from "@/data/burgerBuilder"
 
@@ -76,6 +77,8 @@ export default function CreateOmero() {
               Scegli pane, carne, formaggi, extra e salse. Costruisci la tua torre di sapore!
             </Text>
           </Animated.View>
+
+          <BuilderBurgerPreview groups={BUILDER_GROUPS} selections={selections} />
 
           <View style={{ gap: 12 }}>
             {BUILDER_GROUPS.map((group, groupIndex) => (
