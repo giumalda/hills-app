@@ -37,6 +37,7 @@ jobs:
 
       - name: Compila l'app iOS
         run: |
+          set -euo pipefail
           WORKSPACE="$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)"
           if [ -z "$WORKSPACE" ]; then
             echo "::error::Non è stato trovato il workspace iOS generato da Expo."
@@ -48,7 +49,7 @@ jobs:
             exit 1
           fi
           SCHEME="$(basename "$PROJECT_PATH" .xcodeproj)"
-          EXPECTED_SCHEME="$SCHEME" xcodebuild -workspace "$WORKSPACE" -list -json | node -e '
+          xcodebuild -workspace "$WORKSPACE" -list -json | EXPECTED_SCHEME="$SCHEME" node -e '
             let input = "";
             process.stdin.on("data", chunk => input += chunk);
             process.stdin.on("end", () => {
