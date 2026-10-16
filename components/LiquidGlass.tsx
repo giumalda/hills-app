@@ -5,6 +5,7 @@ import { glassShadow } from "@/constants/theme"
 type Props = ViewProps & {
   intensity?: number
   tintColor?: string
+  shadow?: boolean
 }
 
 export function LiquidGlass({
@@ -12,6 +13,7 @@ export function LiquidGlass({
   children,
   intensity = 72,
   tintColor = "rgba(255,255,255,0.38)",
+  shadow = true,
   ...rest
 }: Props) {
   return (
@@ -19,10 +21,10 @@ export function LiquidGlass({
       {...rest}
       style={[
         styles.container,
-        glassShadow,
+        shadow ? glassShadow : null,
         {
-          backgroundColor: tintColor,
-          borderColor: "rgba(255,255,255,0.78)",
+          backgroundColor: "transparent",
+          borderColor: "rgba(255,255,255,0.64)",
         },
         Platform.OS === "web" ? styles.webGlass : null,
         style,
@@ -32,13 +34,18 @@ export function LiquidGlass({
         <BlurView
           pointerEvents="none"
           intensity={intensity}
-          tint="light"
+          tint="systemThinMaterialLight"
           style={StyleSheet.absoluteFill}
         />
       ) : null}
       <View
         pointerEvents="none"
-        style={[StyleSheet.absoluteFill, styles.tint, { backgroundColor: tintColor }]}
+        style={[
+          StyleSheet.absoluteFill,
+          styles.tint,
+          Platform.OS === "android" && styles.androidTint,
+          { backgroundColor: tintColor },
+        ]}
       />
       <View pointerEvents="none" style={styles.highlight} />
       {children}
@@ -52,13 +59,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   webGlass: {
-    // @ts-expect-error web-only CSS
     backdropFilter: "blur(24px) saturate(180%)",
-    // @ts-expect-error web-only CSS
-    WebkitBackdropFilter: "blur(24px) saturate(180%)",
   },
   tint: {
-    opacity: 0.48,
+    opacity: 0.32,
+  },
+  androidTint: {
+    opacity: 0.68,
   },
   highlight: {
     position: "absolute",
@@ -66,6 +73,6 @@ const styles = StyleSheet.create({
     left: 1,
     right: 1,
     height: 1,
-    backgroundColor: "rgba(255,255,255,0.88)",
+    backgroundColor: "rgba(255,255,255,0.72)",
   },
 })

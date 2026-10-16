@@ -6,8 +6,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated"
-import { BlurView } from "expo-blur"
-import { Platform, Pressable, StyleSheet, View, type PressableProps } from "react-native"
+import { Pressable, StyleSheet, type PressableProps } from "react-native"
+import { LiquidGlass } from "@/components/LiquidGlass"
 
 const AnimatedPressableBase = Animated.createAnimatedComponent(Pressable)
 
@@ -27,9 +27,12 @@ export function AnimatedPressable({
   const scale = useSharedValue(1)
   const reduceMotion = useReducedMotion()
   const resolvedStyle = typeof style === "function"
-    ? style({ pressed, hovered: false, focused: false })
+    ? style({ pressed, hovered: false })
     : style
   const borderRadius = StyleSheet.flatten(resolvedStyle)?.borderRadius ?? 22
+  const renderedChildren = typeof children === "function"
+    ? children({ pressed, hovered: false })
+    : children
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: reduceMotion ? 1 : scale.value }],
   }), [reduceMotion])
@@ -60,51 +63,14 @@ export function AnimatedPressable({
       style={[resolvedStyle, animatedStyle]}
     >
       {glass ? (
-        <View
+        <LiquidGlass
           pointerEvents="none"
-          style={[StyleSheet.absoluteFillObject, styles.glass, { borderRadius }]}
-        >
-          {Platform.OS === "ios" ? (
-            <BlurView
-              pointerEvents="none"
-              intensity={24}
-              tint="light"
-              style={StyleSheet.absoluteFill}
-            />
-          ) : null}
-          <View pointerEvents="none" style={styles.glassTint} />
-          <View pointerEvents="none" style={styles.highlight} />
-        </View>
+          shadow={false}
+          intensity={24}
+          style={[StyleSheet.absoluteFillObject, { borderRadius }]}
+        />
       ) : null}
-      {children}
+      {renderedChildren}
     </AnimatedPressableBase>
   )
 }
-
-const stylesWeb = {
-  // @ts-expect-error web-only CSS
-  backdropFilter: "blur(14px) saturate(160%)",
-  // @ts-expect-error web-only CSS
-  WebkitBackdropFilter: "blur(14px) saturate(160%)",
-}
-
-const styles = StyleSheet.create({
-  glass: {
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.58)",
-    ...Platform.select({ web: stylesWeb }),
-  },
-  glassTint: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.1)",
-  },
-  highlight: {
-    position: "absolute",
-    top: 0,
-    left: 1,
-    right: 1,
-    height: 1,
-    backgroundColor: "rgba(255,255,255,0.78)",
-  },
-})

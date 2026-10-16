@@ -18,7 +18,7 @@ export function PopCard({
 }: Props) {
   const cardStyle = [
     {
-      backgroundColor: glass ? "rgba(255,255,255,0.28)" : bg,
+      backgroundColor: glass ? "transparent" : bg,
       borderWidth: 1,
       borderColor: glass ? "rgba(255,255,255,0.72)" : "rgba(26,20,15,0.08)",
       borderRadius: 22,

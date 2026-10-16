@@ -23,7 +23,7 @@ export function SurfaceCard({
       borderRadius: radius,
       borderWidth: 1,
       borderColor: glass ? "rgba(255,255,255,0.72)" : "rgba(26,20,15,0.08)",
-      backgroundColor: glass ? "rgba(255,255,255,0.3)" : "#FFFEFA",
+      backgroundColor: glass ? "transparent" : "#FFFEFA",
       padding,
       ...glassShadow,
     },

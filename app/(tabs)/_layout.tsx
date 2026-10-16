@@ -29,20 +29,20 @@ export default function TabsLayout() {
             tabBarShowLabel: true,
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: { fontSize: 10, fontFamily: FONTS.sansBold, marginTop: 2 },
-            tabBarItemStyle: { borderRadius: 999, marginHorizontal: 1, paddingHorizontal: 1 },
+            tabBarItemStyle: { borderRadius: 999, marginHorizontal: 2, paddingHorizontal: 2 },
             tabBarBackground: () => (
               <LiquidGlass
                 pointerEvents="none"
-                intensity={76}
-                tintColor="rgba(255,255,255,0.42)"
-                style={[StyleSheet.absoluteFillObject, { borderRadius: 999 }]}
+                intensity={58}
+                tintColor="rgba(255,255,255,0.3)"
+                style={[StyleSheet.absoluteFillObject, { borderRadius: 28 }]}
               />
             ),
             tabBarStyle: {
               position: "absolute",
               left: 10,
               right: 10,
-              bottom: Platform.OS === "web" ? 8 : Math.max(insets.bottom, 8),
+              bottom: Platform.OS === "web" ? 8 : insets.bottom + 8,
               height: 78,
               paddingTop: 5,
               paddingBottom: 5,
@@ -52,7 +52,7 @@ export default function TabsLayout() {
               shadowColor: "#000",
               shadowOpacity: 0,
               shadowRadius: 0,
-              elevation: 0,
+              elevation: Platform.OS === "android" ? 6 : 0,
             },
           }}
         >
@@ -143,17 +143,11 @@ function TabIcon({
     })
   }, [focused, scale])
 
-  const icon = <Ionicons name={name} size={size} color={color} />
-
-  return focused ? (
+  return (
     <Animated.View style={animatedStyle}>
-      <LiquidGlass intensity={36} tintColor="rgba(255,217,15,0.72)" style={styles.activeIcon}>
-        {icon}
-      </LiquidGlass>
-    </Animated.View>
-  ) : (
-    <Animated.View style={animatedStyle}>
-      <View style={styles.iconContainer}>{icon}</View>
+      <View style={[styles.iconContainer, focused && styles.activeIcon]}>
+        <Ionicons name={name} size={size} color={color} />
+      </View>
     </Animated.View>
   )
 }
@@ -168,11 +162,8 @@ const styles = StyleSheet.create({
     borderRadius: 22,
   },
   activeIcon: {
-    width: 44,
-    height: 44,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 999,
     backgroundColor: COLORS.sun,
+    borderWidth: 1,
+    borderColor: "rgba(26,20,15,0.12)",
   },
 })
