@@ -39,7 +39,15 @@
       "output": "single"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "color": "#FFD90F",
+          "defaultChannel": "promozioni",
+          "sounds": []
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
