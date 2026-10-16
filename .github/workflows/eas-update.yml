@@ -1,0 +1,83 @@
+name: Publish app update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "components/**"
+      - "constants/**"
+      - "data/**"
+      - "lib/**"
+      - "assets/**"
+      - "global.css"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eas-update-production
+  cancel-in-progress: false
+
+jobs:
+  publish-update:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recupera il codice
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Rileva modifiche che richiedono una nuova build
+        id: native-changes
+        shell: bash
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$GITHUB_EVENT_BEFORE" || "$GITHUB_EVENT_BEFORE" =~ ^0+$ ]]; then
+            CHANGED_FILES="$(git ls-files)"
+          else
+            CHANGED_FILES="$(git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA")"
+          fi
+
+          if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(app\.json|eas\.json|package\.json|package-lock\.json|babel\.config\.js|metro\.config\.js|assets/images/(app-icon-[^/]+|hills-logo-black\.png))$'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Questo commit modifica la configurazione nativa o le dipendenze. Pubblica un nuovo APK/IPA prima di rilasciare aggiornamenti OTA."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Controlla il token Expo
+        if: steps.native-changes.outputs.skip != 'true'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::Aggiungi EXPO_TOKEN nei Secrets del repository GitHub per pubblicare gli aggiornamenti OTA."
+            exit 1
+          fi
+
+      - name: Configura Node.js
+        if: steps.native-changes.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Configura EAS
+        if: steps.native-changes.outputs.skip != 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Installa le dipendenze
+        if: steps.native-changes.outputs.skip != 'true'
+        run: npm ci
+
+      - name: Pubblica aggiornamento OTA per Android e iOS
+        if: steps.native-changes.outputs.skip != 'true'
+        run: eas update --channel production --platform all --message "main ${GITHUB_SHA}" --non-interactive
