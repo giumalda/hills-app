@@ -3,12 +3,42 @@ import { ActivityIndicator, Platform, Pressable, SafeAreaView, StyleSheet, View 
 import { WebView } from "react-native-webview"
 import { Ionicons } from "@expo/vector-icons"
 import { AppText } from "@/components/AppText"
+import { DotBackground } from "@/components/DotBackground"
 import { COLORS, FONTS } from "@/constants/theme"
 import {
   enablePushNotifications,
   getLocalPushToken,
   removeLocalPushRegistration,
 } from "@/lib/push-notifications"
+
+const TRANSPARENT_COUPON_BACKGROUND = `
+(() => {
+  const installTransparentBackground = () => {
+    if (!document.documentElement) return false;
+
+    let style = document.getElementById("hills-coupon-transparent-background");
+    if (!style) {
+      style = document.createElement("style");
+      style.id = "hills-coupon-transparent-background";
+      style.textContent = "html, body { background: transparent !important; background-color: transparent !important; }";
+      (document.head || document.documentElement).appendChild(style);
+    }
+
+    document.documentElement.style.setProperty("background-color", "transparent", "important");
+    document.body?.style.setProperty("background-color", "transparent", "important");
+    return true;
+  };
+
+  if (!installTransparentBackground()) {
+    const observer = new MutationObserver(() => {
+      if (installTransparentBackground()) observer.disconnect();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  }
+
+  return true;
+})();
+`
 
 export default function CouponScreen() {
   const [registered, setRegistered] = useState(false)
@@ -54,6 +84,7 @@ export default function CouponScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <DotBackground />
       {Platform.OS !== "web" ? (
         <View style={styles.pushPanel}>
           <View style={styles.pushHeading}>
@@ -101,6 +132,8 @@ export default function CouponScreen() {
         style={styles.webview}
         javaScriptEnabled
         domStorageEnabled
+        injectedJavaScriptBeforeContentLoaded={TRANSPARENT_COUPON_BACKGROUND}
+        injectedJavaScript={TRANSPARENT_COUPON_BACKGROUND}
         startInLoadingState
       />
     </SafeAreaView>
@@ -110,10 +143,11 @@ export default function CouponScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.sun,
   },
   webview: {
     flex: 1,
+    backgroundColor: "transparent",
   },
   pushPanel: {
     paddingHorizontal: 16,
