@@ -87,13 +87,35 @@ jobs:
             find build_output/Build/Products -maxdepth 3 -type d -print || true
             exit 1
           fi
+          if [ ! -s "$APP_PATH/Info.plist" ] || [ ! -s "$APP_PATH/main.jsbundle" ]; then
+            echo "::error::L'app iOS generata è incompleta: mancano Info.plist o main.jsbundle."
+            exit 1
+          fi
+          EXPECTED_BUNDLE_ID="$(node -p "require('./app.json').expo.ios.bundleIdentifier")"
+          ACTUAL_BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP_PATH/Info.plist")"
+          if [ "$ACTUAL_BUNDLE_ID" != "$EXPECTED_BUNDLE_ID" ]; then
+            echo "::error::Bundle ID IPA inatteso: $ACTUAL_BUNDLE_ID (atteso $EXPECTED_BUNDLE_ID)."
+            exit 1
+          fi
+
           mkdir -p ipa/Payload
           cp -R "$APP_PATH" ipa/Payload/
           cd ipa
           zip -qry ../Hills-Burger-unsigned.ipa Payload
-          unzip -t ../Hills-Burger-unsigned.ipa
-          unzip -Z1 ../Hills-Burger-unsigned.ipa | grep -Eq '^Payload/[^/]+\.app/Info\.plist$'
-          unzip -Z1 ../Hills-Burger-unsigned.ipa | grep -Eq '^Payload/[^/]+\.app/main\.jsbundle$'
+          IPA_PATH="../Hills-Burger-unsigned.ipa"
+          IPA_APP_PATH="Payload/$(basename "$APP_PATH")"
+          unzip -tq "$IPA_PATH"
+          unzip -p "$IPA_PATH" "$IPA_APP_PATH/Info.plist" > "$RUNNER_TEMP/ipa-Info.plist"
+          IPA_BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$RUNNER_TEMP/ipa-Info.plist")"
+          if [ "$IPA_BUNDLE_ID" != "$EXPECTED_BUNDLE_ID" ]; then
+            echo "::error::Il Bundle ID nell'IPA non corrisponde: $IPA_BUNDLE_ID (atteso $EXPECTED_BUNDLE_ID)."
+            exit 1
+          fi
+          unzip -p "$IPA_PATH" "$IPA_APP_PATH/main.jsbundle" > "$RUNNER_TEMP/ipa-main.jsbundle"
+          if [ ! -s "$RUNNER_TEMP/ipa-main.jsbundle" ]; then
+            echo "::error::Il bundle JavaScript nell'IPA è assente o vuoto."
+            exit 1
+          fi
           echo "## IPA iOS non firmato" >> "$GITHUB_STEP_SUMMARY"
           echo "Il file IPA è validato ma non firmato; trascinalo in Sideloadly e firmalo con il tuo Apple ID prima dell'installazione. Per distribuirlo senza sideloading servono certificato Apple Developer e provisioning profile." >> "$GITHUB_STEP_SUMMARY"
 
