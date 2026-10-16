@@ -56,7 +56,7 @@ export function OrderPad() {
           style={{
             position: "absolute",
             left: 16,
-            bottom: Platform.OS === "web" ? 92 : insets.bottom + 88,
+            bottom: Platform.OS === "web" ? 92 : insets.bottom + 100,
             zIndex: 90,
             borderRadius: 999,
           }}

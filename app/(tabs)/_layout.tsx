@@ -42,7 +42,7 @@ export default function TabsLayout() {
               position: "absolute",
               left: 10,
               right: 10,
-              bottom: Platform.OS === "web" ? 8 : insets.bottom + 8,
+              bottom: Platform.OS === "web" ? 8 : insets.bottom + 20,
               height: 78,
               paddingTop: 5,
               paddingBottom: 5,
