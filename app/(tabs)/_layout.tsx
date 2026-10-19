@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
-import { Platform, StyleSheet, View } from "react-native"
+import { Platform, StyleSheet, View, Text } from "react-native"
 import Animated, {
   ReduceMotion,
   useAnimatedStyle,
@@ -14,6 +14,7 @@ import { COLORS, FONTS } from "@/constants/theme"
 import { OrderPad } from "@/components/order/OrderPad"
 import { OrderProvider } from "@/components/order/OrderProvider"
 import { LiquidGlass } from "@/components/LiquidGlass"
+import { AppText } from "@/components/AppText"
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets()
@@ -151,11 +152,6 @@ function TabIcon({
     <Animated.View style={animatedStyle}>
       <View style={[styles.iconContainer, focused && styles.activeIcon]}>
         <Ionicons name={name} size={size} color={focused ? COLORS.ink : color} />
-        {focused && (
-          <Text style={{ fontFamily: FONTS.sansBold, fontSize: 10, color: COLORS.ink, marginTop: 2 }}>
-            {/* Il testo viene gestito qui per essere incluso nello stile attivo */}
-          </Text>
-        )}
       </View>
     </Animated.View>
   )
@@ -163,7 +159,7 @@ function TabIcon({
 
 const styles = StyleSheet.create({
   iconContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     alignItems: "center",
     justifyContent: "center",
