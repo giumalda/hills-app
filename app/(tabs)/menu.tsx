@@ -284,7 +284,7 @@ export default function Menu() {
                 </Text>
               </View>
             </View>
-            <SurfaceCard radius={22} padding={0} style={{ overflow: "hidden" }}>
+            <SurfaceCard glass radius={22} padding={0} style={{ overflow: "hidden" }}>
               <View
                 style={{
                   flexDirection: "row",

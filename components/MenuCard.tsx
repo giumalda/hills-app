@@ -44,6 +44,7 @@ export function MenuCard({ item }: { item: MenuCardItem }) {
 
   return (
     <SurfaceCard
+      glass
       radius={22}
       padding={16}
       style={{

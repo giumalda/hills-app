@@ -200,6 +200,7 @@ export default function Home() {
                   style={{ width: isWide ? (Math.min(width, 900) - 52) / 2 : (width - 52) / 2 }}
                 >
                   <SurfaceCard
+                    glass
                     padding={14}
                     style={{ minHeight: 112 }}
                   >

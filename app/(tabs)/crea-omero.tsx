@@ -87,7 +87,7 @@ export default function CreateOmero() {
                 key={group.id}
                 entering={FadeInDown.delay(groupIndex * 55).duration(340).reduceMotion(ReduceMotion.System)}
               >
-                <SurfaceCard radius={22} padding={16}>
+                <SurfaceCard glass radius={22} padding={16}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   <Text style={{ fontSize: 20 }}>{group.emoji}</Text>
                   <Text style={{ fontFamily: FONTS.display, fontSize: 19, color: COLORS.ink }}>
@@ -141,7 +141,7 @@ export default function CreateOmero() {
           <Animated.View
             entering={FadeInDown.delay(BUILDER_GROUPS.length * 55).duration(340).reduceMotion(ReduceMotion.System)}
           >
-          <SurfaceCard radius={24} padding={18} style={{ marginTop: 14 }}>
+          <SurfaceCard glass radius={24} padding={18} style={{ marginTop: 14 }}>
             <Text style={{ fontFamily: FONTS.display, fontSize: 21, color: COLORS.ink }}>
               Il tuo panino 🍔
             </Text>
