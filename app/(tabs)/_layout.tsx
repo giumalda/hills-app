@@ -28,30 +28,34 @@ export default function TabsLayout() {
             tabBarInactiveTintColor: "rgba(26,20,15,0.62)",
             tabBarShowLabel: true,
             tabBarLabelPosition: "below-icon",
-            tabBarLabelStyle: { fontSize: 10, fontFamily: FONTS.sansBold, marginTop: 2 },
-            tabBarItemStyle: { borderRadius: 999, marginHorizontal: 2, paddingHorizontal: 2 },
+            tabBarLabelStyle: { fontSize: 10, fontFamily: FONTS.sansBold, marginTop: 4 },
+            tabBarItemStyle: {
+              borderRadius: 20,
+              marginHorizontal: 4,
+              paddingVertical: 4
+            },
             tabBarBackground: () => (
               <LiquidGlass
                 pointerEvents="none"
-                intensity={68}
-                tintColor="rgba(255,255,255,0.4)"
+                intensity={80}
+                tintColor="rgba(255,255,255,0.5)"
                 style={[StyleSheet.absoluteFillObject, { borderRadius: 40 }]}
               />
             ),
             tabBarStyle: {
               position: "absolute",
-              left: 24,
-              right: 24,
-              bottom: Platform.OS === "web" ? 24 : insets.bottom + 24,
-              height: 70,
+              left: 16,
+              right: 16,
+              bottom: Platform.OS === "web" ? 24 : insets.bottom + 16,
+              height: 80,
               borderRadius: 40,
               backgroundColor: "transparent",
-              borderTopWidth: 0,
-              borderTopColor: "transparent",
+              borderWidth: 1,
+              borderColor: "rgba(255,255,255,0.5)",
               shadowColor: "#000",
-              shadowOpacity: 0.1,
-              shadowRadius: 10,
-              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 20,
+              shadowOffset: { width: 0, height: 10 },
               elevation: 10,
             },
           }}
@@ -146,7 +150,12 @@ function TabIcon({
   return (
     <Animated.View style={animatedStyle}>
       <View style={[styles.iconContainer, focused && styles.activeIcon]}>
-        <Ionicons name={name} size={size} color={color} />
+        <Ionicons name={name} size={size} color={focused ? COLORS.ink : color} />
+        {focused && (
+          <Text style={{ fontFamily: FONTS.sansBold, fontSize: 10, color: COLORS.ink, marginTop: 2 }}>
+            {/* Il testo viene gestito qui per essere incluso nello stile attivo */}
+          </Text>
+        )}
       </View>
     </Animated.View>
   )
@@ -154,12 +163,11 @@ function TabIcon({
 
 const styles = StyleSheet.create({
   iconContainer: {
-    width: 44,
-    height: 44,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 22,
+    borderRadius: 20,
   },
   activeIcon: {
     backgroundColor: COLORS.sun,
