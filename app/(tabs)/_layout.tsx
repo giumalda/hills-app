@@ -33,26 +33,26 @@ export default function TabsLayout() {
             tabBarBackground: () => (
               <LiquidGlass
                 pointerEvents="none"
-                intensity={58}
-                tintColor="rgba(255,255,255,0.3)"
-                style={[StyleSheet.absoluteFillObject, { borderRadius: 28 }]}
+                intensity={68}
+                tintColor="rgba(255,255,255,0.4)"
+                style={[StyleSheet.absoluteFillObject, { borderRadius: 40 }]}
               />
             ),
             tabBarStyle: {
               position: "absolute",
-              left: 10,
-              right: 10,
-              bottom: Platform.OS === "web" ? 8 : insets.bottom + 20,
-              height: 78,
-              paddingTop: 5,
-              paddingBottom: 5,
+              left: 24,
+              right: 24,
+              bottom: Platform.OS === "web" ? 24 : insets.bottom + 24,
+              height: 70,
+              borderRadius: 40,
               backgroundColor: "transparent",
               borderTopWidth: 0,
               borderTopColor: "transparent",
               shadowColor: "#000",
-              shadowOpacity: 0,
-              shadowRadius: 0,
-              elevation: Platform.OS === "android" ? 6 : 0,
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+              shadowOffset: { width: 0, height: 4 },
+              elevation: 10,
             },
           }}
         >

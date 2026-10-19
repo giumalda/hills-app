@@ -69,10 +69,10 @@ export function OrderPad() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: 8,
+              gap: 12,
               borderRadius: 999,
-              paddingHorizontal: 14,
-              paddingVertical: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 12,
             }}
           >
             <Ionicons name="bag-handle-outline" size={18} color={COLORS.ink} />
